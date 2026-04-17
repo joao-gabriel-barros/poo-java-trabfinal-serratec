@@ -1,5 +1,8 @@
 package br.com.FolhaDePagamento;
 
+import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
+
+import java.sql.Connection;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -29,6 +32,9 @@ public class Main {
                         break;
                     case "5":
                         System.out.println("Listar Histórico de Folhas de Pagamento");
+                        break;
+                    case "6":
+                        testarConexaoComBancoDeDados();
                         break;
                     case "0":
                         opcaoDeSaida = "S";
@@ -68,6 +74,8 @@ public class Main {
         System.out.println("\t3. Listar Todos os Departamentos");
         System.out.println("\t4. Listar Funcionários por Departamento");
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
+        System.out.println("\n --- TESTE DE CONEXÃO COM BANCO DE DADOS ---");
+        System.out.println("\t6. Testar conexão com banco de dados");
         System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
     }
@@ -75,5 +83,9 @@ public class Main {
     private static String capturarOpcaoMenu(Scanner sc) {
         System.out.print("Digite a opção desejada: ");
         return sc.nextLine().trim();
+    }
+
+    private static void testarConexaoComBancoDeDados() {
+        Connection coneection = new ConnectionFactory().getConnection();
     }
 }
