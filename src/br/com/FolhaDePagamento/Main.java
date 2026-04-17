@@ -2,10 +2,16 @@ package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
+import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -28,7 +34,7 @@ public class Main {
 
                 switch (opcaoMenu) {
                     case "1":
-                        System.out.println("Calcular folha em lote.");
+                        calcularLoteViaArquivo(sc);
                         break;
                     case "2":
                         System.out.println("Calcular folha avulsa.");
@@ -58,7 +64,6 @@ public class Main {
 
             }catch(Exception e) {
                 System.out.println("Erro: " + e.getMessage());
-                e.printStackTrace();
             }
 
             System.out.println("Deseja sair do sistema(S/N):");
@@ -95,6 +100,20 @@ public class Main {
     }
 
     private static void testarConexaoComBancoDeDados() {
-        Connection coneection = new ConnectionFactory().getConnection();
+        try (Connection connection = new ConnectionFactory().getConnection()) {
+            System.out.println("Conexao testada com sucesso.");
+        } catch (SQLException e) {
+            System.out.println("Falha ao testar conexao: " + e.getMessage());
+        }
+    }
+
+    private static String lerString(Scanner sc, String mensagem) {
+        System.out.print(mensagem);
+        return sc.nextLine();
+    }
+
+    private static void calcularLoteViaArquivo(Scanner sc) {
+        String arquivoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
+        lerArquivoCsv(arquivoDeEntrada);
     }
 }
