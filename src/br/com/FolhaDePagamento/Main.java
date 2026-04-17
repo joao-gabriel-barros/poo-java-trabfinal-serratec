@@ -12,6 +12,34 @@ public class Main {
         do{
             try{
                 exibirMenu();
+                String opcaoMenu = capturarOpcaoMenu(sc);
+
+                switch (opcaoMenu) {
+                    case "1":
+                        System.out.println("Calcular folha em lote.");
+                        break;
+                    case "2":
+                        System.out.println("Calcular folha avulsa.");
+                        break;
+                    case "3":
+                        System.out.println("Listar Todos os Departamentos");
+                        break;
+                    case "4":
+                        System.out.println("Listar Funcionários por Departamento");
+                        break;
+                    case "5":
+                        System.out.println("Listar Histórico de Folhas de Pagamento");
+                        break;
+                    case "0":
+                        opcaoDeSaida = "S";
+                        break;
+                    default:
+                        System.out.println("Opção inválida. Tente novamente.");
+                }
+
+                if (opcaoDeSaida.equalsIgnoreCase("S")) {
+                    break;
+                }
 
             }catch(Exception e) {
                 System.out.println("Erro: " + e.getMessage());
@@ -24,9 +52,9 @@ public class Main {
         while(!opcaoDeSaida.equalsIgnoreCase("S"));
 
         sc.close();
-        System.out.println("\n\n====================");
+        System.out.println("\n\n=================================");
         System.out.println("Programa finalizado com sucesso.");
-        System.out.println("====================");
+        System.out.println("=================================");
     }
 
     public static void exibirMenu(){
@@ -40,8 +68,12 @@ public class Main {
         System.out.println("\t3. Listar Todos os Departamentos");
         System.out.println("\t4. Listar Funcionários por Departamento");
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
-        System.out.println("\n\t6. Sair");
+        System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
-        System.out.println("Escolha uma opção: ");
+    }
+
+    private static String capturarOpcaoMenu(Scanner sc) {
+        System.out.print("Digite a opção desejada: ");
+        return sc.nextLine().trim();
     }
 }
