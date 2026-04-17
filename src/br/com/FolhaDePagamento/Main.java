@@ -46,7 +46,7 @@ public class Main {
                 e.printStackTrace();
             }
 
-            System.out.println("Deseja continuar(S/N):");
+            System.out.println("Deseja sair do sistema(S/N):");
             opcaoDeSaida = sc.nextLine();
         }
         while(!opcaoDeSaida.equalsIgnoreCase("S"));
