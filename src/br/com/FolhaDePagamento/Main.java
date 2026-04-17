@@ -10,6 +10,13 @@ public class Main {
         String opcaoDeSaida = "";
 
         do{
+            try{
+                exibirMenu();
+
+            }catch(Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+                e.printStackTrace();
+            }
 
             System.out.println("Deseja continuar(S/N):");
             opcaoDeSaida = sc.nextLine();
@@ -17,8 +24,24 @@ public class Main {
         while(!opcaoDeSaida.equalsIgnoreCase("S"));
 
         sc.close();
-        System.out.println("====================");
+        System.out.println("\n\n====================");
         System.out.println("Programa finalizado com sucesso.");
         System.out.println("====================");
+    }
+
+    public static void exibirMenu(){
+        System.out.println("\n\n\n===============================================");
+        System.out.println("------ Sistema de Pagamentos - Serratec ------- ");
+        System.out.println("===============================================");
+        System.out.println("\n --- PROCESSAMENTO DE DADOS ---");
+        System.out.println("\t1. Calcular Folha em Lote (Via Arquivo CSV)");
+        System.out.println("\t2. Calcular Folha Avulsa (Cadastro Manual)");
+        System.out.println("\n --- RELATÓRIOS DO BANCO DE DADOS ---");
+        System.out.println("\t3. Listar Todos os Departamentos");
+        System.out.println("\t4. Listar Funcionários por Departamento");
+        System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
+        System.out.println("\n\t6. Sair");
+        System.out.println("--------------------------------------- ");
+        System.out.println("Escolha uma opção: ");
     }
 }
