@@ -1,5 +1,8 @@
 package br.com.FolhaDePagamento;
 
+import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
+
+import java.sql.Connection;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -83,6 +86,6 @@ public class Main {
     }
 
     private static void testarConexaoComBancoDeDados() {
-
+        Connection coneection = new ConnectionFactory().getConnection();
     }
 }
