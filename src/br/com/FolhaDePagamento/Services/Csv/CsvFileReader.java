@@ -59,6 +59,6 @@ public class CsvFileReader {
             throw new RuntimeException(e);
         }
 
-        return funcionarios, dependentes;
+        return funcionarios;
     }
 }
