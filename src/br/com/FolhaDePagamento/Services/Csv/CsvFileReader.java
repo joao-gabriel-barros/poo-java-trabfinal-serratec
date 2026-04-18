@@ -18,7 +18,13 @@ public class CsvFileReader {
     public static List<Funcionario> lerArquivoCsv(String arquivo) {
         List<Funcionario> funcionarios = new ArrayList<>();
         List<Dependente> dependentes = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // TODO
+        //  Lê o CSV de entrada e cria os objetos.
+        //  Realiza os cálculos de INSS e IR.
+        //  Salva tudo no banco.
+        //  Gera o CSV de saída no local especificado pelo usuário.
 
         try {
             Scanner arquivoScanner = new Scanner(new File(arquivo));
@@ -51,6 +57,8 @@ public class CsvFileReader {
             }
 
             arquivoScanner.close();
+            System.out.println(funcionarios);
+            System.out.println(dependentes);
 
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo não encontrado !");
