@@ -1,21 +1,16 @@
 package br.com.FolhaDePagamento.Model;
 
 public class Departamento {
-    private int id;
+    private Integer id;
     private String nome;
 
-
-    public Departamento() {}
-    public Departamento(String nome) {
+    public Departamento(Integer id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -24,7 +19,7 @@ public class Departamento {
 
     @Override
     public String toString() {
-        return " { " +
+        return "{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 '}';

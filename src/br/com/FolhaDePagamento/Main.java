@@ -1,5 +1,7 @@
 package br.com.FolhaDePagamento;
 
+import br.com.FolhaDePagamento.Dao.DepartamentoDao;
+import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
 import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
@@ -9,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
@@ -41,6 +44,11 @@ public class Main {
                         break;
                     case "3":
                         System.out.println("Listar Todos os Departamentos");
+                        DepartamentoDao dep = new DepartamentoDao();
+                        List<Departamento> departamentos = dep.listar();
+                        for (Departamento departamento : departamentos){
+                            System.out.println(departamento);
+                        }
                         break;
                     case "4":
                         System.out.println("Listar Funcionários por Departamento");
