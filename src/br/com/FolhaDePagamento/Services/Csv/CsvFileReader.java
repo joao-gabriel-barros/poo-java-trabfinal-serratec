@@ -57,6 +57,8 @@ public class CsvFileReader {
             }
 
             arquivoScanner.close();
+            System.out.println(funcionarios);
+            System.out.println(dependentes);
 
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo não encontrado !");
