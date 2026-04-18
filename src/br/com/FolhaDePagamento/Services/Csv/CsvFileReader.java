@@ -69,9 +69,3 @@ public class CsvFileReader {
         return funcionarios;
     }
 }
-// todo - O sistema solicita no console: "Digite o caminho completo do arquivo de entrada:"
-//  O sistema solicita: "Digite o caminho completo e nome do arquivo de saída:"
-//  Lê o CSV de entrada e cria os objetos.
-//  Realiza os cálculos de INSS e IR.
-//  Salva tudo no banco.
-//  Gera o CSV de saída no local especificado pelo usuário.
