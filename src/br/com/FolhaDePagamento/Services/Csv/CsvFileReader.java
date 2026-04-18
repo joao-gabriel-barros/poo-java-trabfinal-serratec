@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import br.com.FolhaDePagamento.Enum.Parentesco;
+import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Dependente;
 import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Model.Departamento;
@@ -54,7 +55,10 @@ public class CsvFileReader {
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo não encontrado !");
             System.out.println(e.getMessage());
+        } catch (CpfInvalidoException e) {
+            throw new RuntimeException(e);
         }
+
         return funcionarios, dependentes;
     }
 }
