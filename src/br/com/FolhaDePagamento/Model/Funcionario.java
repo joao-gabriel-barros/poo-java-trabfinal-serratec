@@ -1,6 +1,7 @@
 package br.com.FolhaDePagamento.Model;
 
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
+
 import java.time.LocalDate;
 
 public final class Funcionario extends Pessoa {
@@ -31,12 +32,12 @@ public final class Funcionario extends Pessoa {
 
     @Override
     public String toString() {
-        return "Funcionário { " +
-                "salarioBruto=" + salarioBruto +
-                ", departamento=" + departamento +
-                ", cpf='" + cpf + '\'' +
-                ", nome='" + nome + '\'' +
-                ", nascimento=" + nascimento +
+        return "Funcionario{" +
+                "Nome = '" + nome + '\'' +
+                ", CPF = '" + cpf + '\'' +
+                ", Nascimento = " + nascimento +
+                ", Departamento = {" + departamento +
+                "}, Salário Bruto = " + salarioBruto +
                 '}';
     }
 }
