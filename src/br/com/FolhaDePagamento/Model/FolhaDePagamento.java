@@ -10,7 +10,6 @@ public class FolhaDePagamento {
     private double ir;
     private double liquido;
 
-    //construtor
     public FolhaDePagamento(int id, String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
         this.id = id;
         this.cpf_funcionario = cpf_funcionario;
@@ -19,8 +18,6 @@ public class FolhaDePagamento {
         this.ir = ir;
         this.liquido = liquido;
     }
-
-    // getters e setters
 
     public int getId() {
         return id;
