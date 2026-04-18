@@ -31,7 +31,7 @@ public final class Funcionario extends Pessoa {
 
     @Override
     public String toString() {
-        return "Funcionario{" +
+        return "Funcionário { " +
                 "departamento=" + departamento +
                 ", salarioBruto=" + salarioBruto +
                 '}';

@@ -38,20 +38,18 @@ public class CsvFileReader {
 
                 if (campos.length >= 5) {
                     String nome = campos[0].trim();
-                    cpfFuncionario = campos[1].trim();
+                    cpfFuncionario = campos[1].trim().replaceAll("\\s+", "").replaceAll("[^0-9]", "");
                     LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
                     double salario = Double.parseDouble(campos[3].trim());
                     departamento = new Departamento(campos[4].trim());
-                    Funcionario funcionario = new Funcionario(nome, cpfFuncionario, dataNascimento, salario, departamento);
+                    Funcionario funcionario = new Funcionario(cpfFuncionario, nome, dataNascimento, salario, departamento);
                     funcionarios.add(funcionario);
-                }
-
-                if (campos.length >= 4) {
+                } else if (campos.length >= 4) {
                     String nome = campos[0].trim();
-                    String cpf = campos[1].trim();
+                    String cpf = campos[1].trim().replaceAll("\\s+", "").replaceAll("[^0-9]", "");
                     LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
-                    Parentesco parentesco = Parentesco.valueOf(campos[3].trim());
-                    Dependente dependente = new Dependente(nome, cpf, dataNascimento, parentesco, cpfFuncionario);
+                    Parentesco parentesco = Parentesco.valueOf(campos[3].trim().toUpperCase());
+                    Dependente dependente = new Dependente(cpf, nome, dataNascimento, parentesco, cpfFuncionario);
                     dependentes.add(dependente);
                 }
             }
