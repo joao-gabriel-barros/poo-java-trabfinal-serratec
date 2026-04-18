@@ -8,28 +8,25 @@ public class CpfValidator {
             throw new CpfInvalidoException("CPF nao pode estar vazio");
         }
 
-        // remove caracteres especiais
-        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
-
         // valida tamanho
-        if (cpfLimpo.length() != 11) {
+        if (cpf.length() != 11) {
             throw new CpfInvalidoException("CPF deve conter 11 dígitos");
         }
 
         // verifica se todos os dígitos sao iguais (inválido)
-        if (cpfLimpo.matches("(\\d)\\1{10}")) {
+        if (cpf.matches("(\\d)\\1{10}")) {
             throw new CpfInvalidoException("CPF com todos os dígitos iguais é inválido");
         }
 
         // calcula primeiro dígito verificador
-        int primeiroVerificador = calcularDigitoVerificador(cpfLimpo, 10);
-        if (Integer.parseInt(cpfLimpo.charAt(9) + "") != primeiroVerificador) {
+        int primeiroVerificador = calcularDigitoVerificador(cpf, 10);
+        if (Integer.parseInt(cpf.charAt(9) + "") != primeiroVerificador) {
             throw new CpfInvalidoException("Primeiro dígito verificador do CPF é inválido");
         }
 
         // calcula segundo dígito verificador
-        int segundoVerificador = calcularDigitoVerificador(cpfLimpo, 11);
-        if (Integer.parseInt(cpfLimpo.charAt(10) + "") != segundoVerificador) {
+        int segundoVerificador = calcularDigitoVerificador(cpf, 11);
+        if (Integer.parseInt(cpf.charAt(10) + "") != segundoVerificador) {
             throw new CpfInvalidoException("Segundo dígito verificador do CPF é inválido");
         }
     }
@@ -47,13 +44,6 @@ public class CpfValidator {
         return (resto < 2) ? 0 : 11 - resto;
     }
 
-    /**
-     * Verifica se o CPF é válido sem lançar exceção.
-     * Retorna true se válido, false se inválido.
-     *
-     * @param cpf string com CPF
-     * @return true se válido, false se inválido
-     */
     public static boolean isValido(String cpf) {
         try {
             validar(cpf);

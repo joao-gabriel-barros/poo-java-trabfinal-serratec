@@ -25,7 +25,7 @@ public final class Dependente extends Pessoa {
 
     @Override
     public String toString() {
-        return "Dependente{" +
+        return "Dependente { " +
                 "parentesco=" + parentesco +
                 ", cpf funcionario=" + cpfFuncionario +
                 '}';

@@ -42,7 +42,7 @@ public sealed abstract class Pessoa permits Funcionario, Dependente {
 
     @Override
     public String toString() {
-        return "Pessoa{" +
+        return "Pessoa { " +
                 "cpf='" + cpf + '\'' +
                 ", nome='" + nome + '\'' +
                 ", nascimento=" + nascimento +

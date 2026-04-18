@@ -69,7 +69,7 @@ public class FolhaDePagamento {
 
     @Override
     public String toString() {
-        return "FolhaDePagamento{ " +
+        return "FolhaDePagamento { " +
                 "id=" + id +
                 ", cpf_funcionario='" + cpf_funcionario + '\'' +
                 ", data=" + data +
