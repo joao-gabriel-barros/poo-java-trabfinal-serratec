@@ -32,8 +32,11 @@ public final class Funcionario extends Pessoa {
     @Override
     public String toString() {
         return "Funcionário { " +
-                "departamento=" + departamento +
-                ", salarioBruto=" + salarioBruto +
+                "salarioBruto=" + salarioBruto +
+                ", departamento=" + departamento +
+                ", cpf='" + cpf + '\'' +
+                ", nome='" + nome + '\'' +
+                ", nascimento=" + nascimento +
                 '}';
     }
 }
