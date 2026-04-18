@@ -4,7 +4,8 @@ public class Departamento {
     private Integer id;
     private String nome;
 
-    public Departamento(String nome) {
+    public Departamento(Integer id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
 
@@ -14,5 +15,13 @@ public class Departamento {
 
     public String getNome() {
         return nome;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                '}';
     }
 }
