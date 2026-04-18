@@ -1,5 +1,7 @@
 package br.com.FolhaDePagamento.Model;
 
+import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
+import br.com.FolhaDePagamento.Services.Validators.CpfValidator;
 import java.time.LocalDate;
 
 public sealed abstract class Pessoa permits Funcionario, Dependente {
@@ -7,8 +9,8 @@ public sealed abstract class Pessoa permits Funcionario, Dependente {
     protected String nome;
     protected LocalDate nascimento;
 
-    public Pessoa(String cpf, String nome, LocalDate nascimento) {
-        this.cpf = cpf;
+    public Pessoa(String cpf, String nome, LocalDate nascimento) throws CpfInvalidoException {
+        setCpf(cpf);
         this.nome = nome;
         this.nascimento = nascimento;
     }
@@ -17,7 +19,8 @@ public sealed abstract class Pessoa permits Funcionario, Dependente {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(String cpf) throws CpfInvalidoException {
+        CpfValidator.validar(cpf);
         this.cpf = cpf;
     }
 

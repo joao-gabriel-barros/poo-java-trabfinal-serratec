@@ -1,12 +1,13 @@
 package br.com.FolhaDePagamento.Model;
 
+import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import java.time.LocalDate;
 
 public final class Funcionario extends Pessoa {
     private double salarioBruto;
     private Departamento departamento;
 
-    public Funcionario(String cpf, String nome, LocalDate nascimento, double salarioBruto, Departamento departamento) {
+    public Funcionario(String cpf, String nome, LocalDate nascimento, double salarioBruto, Departamento departamento) throws CpfInvalidoException {
         super(cpf, nome, nascimento);
         this.salarioBruto = salarioBruto;
         this.departamento = departamento;

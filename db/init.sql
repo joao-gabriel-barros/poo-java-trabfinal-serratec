@@ -21,7 +21,7 @@ CREATE TABLE funcionario (
 );
 
 CREATE TABLE dependente (
-                            id SERIAL PRIMARY KEY, -- Adicionada a vírgula aqui
+                            id SERIAL PRIMARY KEY,
                             cpf VARCHAR(11) NOT NULL UNIQUE,
                             nome VARCHAR(100),
                             nascimento DATE NOT NULL CHECK (nascimento <= CURRENT_DATE),
