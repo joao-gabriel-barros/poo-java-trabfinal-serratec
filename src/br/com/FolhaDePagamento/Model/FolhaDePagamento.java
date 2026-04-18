@@ -1,7 +1,5 @@
 package br.com.FolhaDePagamento.Model;
 
-//todo - Folha de Pagamento: Tabela folha_pagamento (ID, CPF_Funcionario, Data, INSS, IR, Liquido).
-
 import java.time.LocalDate;
 
 public class FolhaDePagamento {
