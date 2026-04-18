@@ -18,7 +18,7 @@ public class CsvFileReader {
     public static List<Funcionario> lerArquivoCsv(String arquivo) {
         List<Funcionario> funcionarios = new ArrayList<>();
         List<Dependente> dependentes = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // TODO
         //  Lê o CSV de entrada e cria os objetos.
