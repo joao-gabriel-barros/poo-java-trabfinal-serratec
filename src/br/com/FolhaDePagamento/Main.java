@@ -113,7 +113,10 @@ public class Main {
     }
 
     private static void calcularLoteViaArquivo(Scanner sc) {
-        String arquivoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
-        lerArquivoCsv(arquivoDeEntrada);
+        String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
+        String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
+        //Lê o CSV de entrada
+        lerArquivoCsv(caminhoDeEntrada);
+        //cria os objetos
     }
 }
