@@ -139,6 +139,8 @@ public class Main {
         List<Dependente> dep = resultado.getDependentes();
 
         System.out.println(func.toString());
-
+        //System.out.println("\n\n");
+        //System.out.println("Dependentes: \n");
+       //System.out.println(dep.toString());
     }
 }
