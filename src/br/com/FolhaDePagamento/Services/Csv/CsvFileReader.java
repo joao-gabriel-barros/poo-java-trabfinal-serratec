@@ -21,7 +21,7 @@ public class CsvFileReader {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // TODO
-        //  Lê o CSV de entrada e cria os objetos.
+        //  cria os objetos.
         //  Realiza os cálculos de INSS e IR.
         //  Salva tudo no banco.
         //  Gera o CSV de saída no local especificado pelo usuário.

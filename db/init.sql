@@ -9,11 +9,10 @@ CREATE TABLE departamento (
 );
 
 CREATE TABLE funcionario (
-                             id SERIAL PRIMARY KEY,
-                             cpf VARCHAR(11) NOT NULL UNIQUE,
+                             cpf VARCHAR(11) NOT NULL PRIMARY KEY,
                              nome VARCHAR(100),
                              nascimento DATE NOT NULL CHECK (nascimento <= CURRENT_DATE),
-                             salario_bruto NUMERIC(15,2),
+                             salario_bruto NUMERIC(15,2) CHECK (salario_bruto > 0),
                              id_departamento INT NOT NULL,
                              CONSTRAINT fk_departamento_funcionario
                                  FOREIGN KEY (id_departamento)
@@ -21,24 +20,23 @@ CREATE TABLE funcionario (
 );
 
 CREATE TABLE dependente (
-                            id SERIAL PRIMARY KEY,
-                            cpf VARCHAR(11) NOT NULL UNIQUE,
+                            cpf VARCHAR(11) NOT NULL PRIMARY KEY,
                             nome VARCHAR(100),
                             nascimento DATE NOT NULL CHECK (nascimento <= CURRENT_DATE),
                             parentesco VARCHAR(10),
-                            id_funcionario INT NOT NULL,
+                            cpf_funcionario VARCHAR(11) NOT NULL,
                             CONSTRAINT fk_funcionario_dependente
-                                FOREIGN KEY (id_funcionario)
-                                    REFERENCES funcionario(id)
+                                FOREIGN KEY (cpf_funcionario)
+                                    REFERENCES funcionario(cpf)
 );
 
 CREATE TABLE folha_pagamento (
                                  id SERIAL PRIMARY KEY,
                                  cpf_funcionario VARCHAR(11),
                                  data DATE NOT NULL CHECK(data <= CURRENT_DATE),
-                                 inss NUMERIC(15,2),
-                                 ir NUMERIC(15,2),
-                                 liquido NUMERIC(15,2),
+                                 inss NUMERIC(15,2) CHECK (inss >= 0),
+                                 ir NUMERIC(15,2) CHECK (ir >= 0),
+                                 liquido NUMERIC(15,2) CHECK (liquido >= 0),
                                  CONSTRAINT fk_funcionario_folha_pagamento
                                      FOREIGN KEY (cpf_funcionario)
                                          REFERENCES funcionario(cpf)
