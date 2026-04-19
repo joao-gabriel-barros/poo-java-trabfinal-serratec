@@ -17,18 +17,18 @@ public class CsvFileRecord {
             writer.write("Nome;CPF;Desconto_INSS;Desconto_IR;SalarioLiquido\n");
 
             // Escrever cada linha de folha de pagamento
-            for (FolhaDePagamento folha : folhas) {
-                String nome = folha.getFuncionario().getNome();
-                String cpf = folha.getFuncionario().getCpf();
-                String inss = df.format(folha.getInss());
-                String ir = df.format(folha.getIr());
-                String liquido = df.format(folha.getLiquido());
+            //for (FolhaDePagamento folha : folhas) {
+                //String nome = folha.getFuncionario().getNome();
+                //String cpf = folha.getFuncionario().getCpf();
+                //String inss = df.format(folha.getInss());
+                //String ir = df.format(folha.getIr());
+                //String liquido = df.format(folha.getLiquido());
 
-                String linha = String.format("%s;%s;%s;%s;%s\n",
-                    nome, cpf, inss, ir, liquido);
+                //String linha = String.format("%s;%s;%s;%s;%s\n",
+                    //nome, cpf, inss, ir, liquido);
 
-                writer.write(linha);
-            }
+               // writer.write(linha);
+            //}
 
             System.out.println("Arquivo gravado com sucesso em: " + caminhoSaida);
 
