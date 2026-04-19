@@ -38,6 +38,6 @@ public final class Funcionario extends Pessoa {
                 ", Nascimento = " + nascimento +
                 ", Departamento = {" + departamento +
                 "}, Salário Bruto = " + salarioBruto +
-                '}';
+                '}' + "\n";
     }
 }
