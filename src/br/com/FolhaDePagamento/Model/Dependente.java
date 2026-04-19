@@ -28,6 +28,6 @@ public final class Dependente extends Pessoa {
         return "Dependente { " +
                 "parentesco=" + parentesco +
                 ", cpf funcionario=" + cpfFuncionario +
-                '}';
+                '}'  + "\n";
     }
 }

@@ -15,16 +15,10 @@ import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Model.Departamento;
 
 public class CsvFileReader {
-    public static List<Funcionario> lerArquivoCsv(String arquivo) {
+    public static CsvResult lerArquivoCsv(String arquivo) {
         List<Funcionario> funcionarios = new ArrayList<>();
         List<Dependente> dependentes = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        // TODO
-        //  cria os objetos.
-        //  Realiza os cálculos de INSS e IR.
-        //  Salva tudo no banco.
-        //  Gera o CSV de saída no local especificado pelo usuário.
 
         try {
             Scanner arquivoScanner = new Scanner(new File(arquivo));
@@ -38,7 +32,7 @@ public class CsvFileReader {
 
                 if (campos.length >= 5) {
                     String nome = campos[0].trim();
-                    cpfFuncionario = campos[1].trim().replaceAll("\\s+", "").replaceAll("[^0-9]", "");
+                    cpfFuncionario = campos[1].trim();
                     LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
                     double salario = Double.parseDouble(campos[3].trim());
                     departamento = new Departamento();
@@ -47,7 +41,7 @@ public class CsvFileReader {
                     funcionarios.add(funcionario);
                 } else if (campos.length >= 4) {
                     String nome = campos[0].trim();
-                    String cpf = campos[1].trim().replaceAll("\\s+", "").replaceAll("[^0-9]", "");
+                    String cpf = campos[1].trim();
                     LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
                     Parentesco parentesco = Parentesco.valueOf(campos[3].trim().toUpperCase());
                     Dependente dependente = new Dependente(cpf, nome, dataNascimento, parentesco, cpfFuncionario);
@@ -56,16 +50,13 @@ public class CsvFileReader {
             }
 
             arquivoScanner.close();
-            System.out.println(funcionarios);
-            System.out.println(dependentes);
 
         } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado !");
             System.out.println(e.getMessage());
         } catch (CpfInvalidoException e) {
             throw new RuntimeException(e);
         }
 
-        return funcionarios;
+        return new CsvResult(funcionarios, dependentes);
     }
 }

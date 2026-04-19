@@ -2,9 +2,12 @@ package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
 import br.com.FolhaDePagamento.Model.Departamento;
+import br.com.FolhaDePagamento.Model.Dependente;
+import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
 import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
+import br.com.FolhaDePagamento.Services.Csv.CsvResult;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -120,11 +123,24 @@ public class Main {
         return sc.nextLine();
     }
 
+
+    // TODO
+    //  Realiza os cálculos de INSS e IR.
+    //  Salva tudo no banco.
+    //  Gera o CSV de saída no local especificado pelo usuário.
+
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         //Lê o CSV de entrada
-        lerArquivoCsv(caminhoDeEntrada);
-        //cria os objetos
+        CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
+        // cria objetos
+        List<Funcionario> func = resultado.getFuncionarios();
+        List<Dependente> dep = resultado.getDependentes();
+
+        System.out.println(func.toString());
+        //System.out.println("\n\n");
+        //System.out.println("Dependentes: \n");
+       //System.out.println(dep.toString());
     }
 }
