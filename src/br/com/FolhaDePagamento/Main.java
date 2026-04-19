@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
+import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCsv;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -142,5 +143,6 @@ public class Main {
         //System.out.println("\n\n");
         //System.out.println("Dependentes: \n");
        //System.out.println(dep.toString());
+        // gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
     }
 }
