@@ -10,9 +10,6 @@ import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
 import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
 import br.com.FolhaDePagamento.Services.Csv.CsvResult;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,10 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
-import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCsv;
 import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
-import static br.com.FolhaDePagamento.Services.Irpf.CalculoIrpfService.calcularIRRF;
+import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
 
 public class Main {
     public static void main(String[] args) {

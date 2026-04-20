@@ -1,6 +1,6 @@
 package br.com.FolhaDePagamento.Interfaces;
 
-public interface CalculoIrpf {
+public interface CalculoIrrf {
     static double calcularBase(double salarioBruto, double valorINSS, int dependentes) {
         return 0;
     }
