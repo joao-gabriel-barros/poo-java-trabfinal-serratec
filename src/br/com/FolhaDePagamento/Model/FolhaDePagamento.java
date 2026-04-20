@@ -10,21 +10,19 @@ public class FolhaDePagamento {
     private double ir;
     private double liquido;
 
-    public FolhaDePagamento(int id, String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
-        this.id = id;
+    public FolhaDePagamento(String cpf_funcionario, LocalDate data, double inss, double ir) {
         this.cpf_funcionario = cpf_funcionario;
         this.data = data;
         this.inss = inss;
         this.ir = ir;
-        this.liquido = liquido;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public FolhaDePagamento( String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
+        this.cpf_funcionario = cpf_funcionario;
+        this.data = data;
+        this.inss = inss;
+        this.ir = ir;
+        setLiquido(liquido);
     }
 
     public String getCpf_funcionario() {
@@ -64,18 +62,20 @@ public class FolhaDePagamento {
     }
 
     public void setLiquido(double liquido) {
+        if (liquido < 0) {
+            throw new IllegalArgumentException("Salario liquido no pode ser menor do que zero");
+        }
         this.liquido = liquido;
     }
 
     @Override
     public String toString() {
         return "FolhaDePagamento { " +
-                "id=" + id +
-                ", cpf_funcionario='" + cpf_funcionario + '\'' +
+                "cpf_funcionario='" + cpf_funcionario + '\'' +
                 ", data=" + data +
                 ", inss=" + inss +
                 ", ir=" + ir +
                 ", liquido=" + liquido +
-                '}';
+                '}' + "\n";
     }
 }

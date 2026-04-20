@@ -3,13 +3,11 @@ package br.com.FolhaDePagamento.Services.Irpf;
 import br.com.FolhaDePagamento.Interfaces.CalculoIrpf;
 
 public class CalculoIrpfService implements CalculoIrpf {
-    @Override
-    public double calcularBase(double salarioBruto, double valorINSS, int dependentes) {
+    public static double calcularBase(double salarioBruto, double valorINSS, int dependentes) {
         return salarioBruto - valorINSS - (dependentes * 189.59);
     }
 
-    @Override
-    public double calcularIRRF(double salarioBruto, double valorINSS, int dependentes) {
+    public static double calcularIRRF(double salarioBruto, double valorINSS, int dependentes) {
         double base = calcularBase(salarioBruto, valorINSS, dependentes);
         double irpf;
 

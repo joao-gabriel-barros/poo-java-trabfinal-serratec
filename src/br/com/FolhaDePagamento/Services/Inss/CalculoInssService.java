@@ -5,7 +5,7 @@ import br.com.FolhaDePagamento.Interfaces.CalculoINSS;
 import static br.com.FolhaDePagamento.Util.ConstantesNegocio.TETO_INSS;
 
 public class CalculoInssService implements CalculoINSS {
-    public static double calcular(double salarioBruto) {
+    public static double calcularInss(double salarioBruto) {
         double aliquota;
         double parcelaDeduzir;
 
