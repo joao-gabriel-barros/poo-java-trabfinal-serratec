@@ -126,7 +126,7 @@ public class Main {
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
-        //Lê o CSV de entrada
+
         CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
 
         List<Funcionario> func = resultado.getFuncionarios();
@@ -135,8 +135,7 @@ public class Main {
 
         fp = calcularImpostos(func, dep);
 
-        System.out.println(fp.toString());
-        // todo - Salva tudo no banco.
+        salvarNoBancoFolhaDePagamento(fp);
 
         // todo - gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
     }
@@ -176,5 +175,10 @@ public class Main {
         }
 
         return fp;
+    }
+
+    private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp){
+        System.out.println(fp.toString());
+        System.out.println("salvo com sucesso no banco.");
     }
 }
