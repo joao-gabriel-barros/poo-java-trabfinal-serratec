@@ -148,5 +148,6 @@ public class Main {
         for (Departamento departamento : departamentos) {
             System.out.println(departamento);
         }
+        System.out.println("\n\n");
     }
 }

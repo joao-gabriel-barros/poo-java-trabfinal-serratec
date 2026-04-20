@@ -47,7 +47,6 @@ public class DepartamentoDao {
             }
         } catch (SQLException e) {
             System.err.println("Não foi possível achar o departamento pelo ID");
-            e.printStackTrace();
         }
         return dpt;
     }
