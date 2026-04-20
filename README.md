@@ -21,7 +21,7 @@ A arquitetura foi desenhada para garantir a máxima organização e separação 
 
 ```text
 src/br/com/FolhaDePagamento
-├── Dao/          # Interfaces e implementações de acesso ao banco (JDBC)
+├── Dao/          # Implementações de acesso ao banco (JDBC)
 ├── Enum/         # Constantes enumeradas (ex: Parentesco)
 ├── Exceptions/   # Exceções personalizadas (ex: CpfInvalido, SalarioInvalido)
 ├── Interfaces/   # Contratos para os motores de cálculo e serviços
