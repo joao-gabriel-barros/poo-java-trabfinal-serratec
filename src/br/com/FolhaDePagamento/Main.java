@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCsv;
 import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
 import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
+import static br.com.FolhaDePagamento.Services.SalarioLiquidoFinal.CalculoSalarioLiquidoService.salarioLiquido;
 
 public class Main {
     public static void main(String[] args) {
@@ -132,7 +134,7 @@ public class Main {
 
         salvarNoBancoFolhaDePagamento(fp);
 
-        // todo - gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
+        gravarArquivoCsv(caminhoDeSaida, fp, func);
     }
 
     private static void listarDepartamentos() {
@@ -165,7 +167,7 @@ public class Main {
             LocalDate data = LocalDate.now();
             double ir  = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
             FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data , inss, ir);
-            folhaDePagamento.setLiquido(arredondar(salario_bruto - inss - ir));
+            folhaDePagamento.setLiquido(arredondar(salarioLiquido(salario_bruto, inss, ir)));
             fp.add(folhaDePagamento);
         }
 
