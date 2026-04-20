@@ -3,6 +3,7 @@ package br.com.FolhaDePagamento;
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Model.Dependente;
+import br.com.FolhaDePagamento.Model.FolhaDePagamento;
 import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
@@ -14,11 +15,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCsv;
+import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
+import static br.com.FolhaDePagamento.Services.Irpf.CalculoIrpfService.calcularIRRF;
 
 public class Main {
     public static void main(String[] args) {
@@ -118,26 +123,20 @@ public class Main {
         return sc.nextLine();
     }
 
-
-    // TODO
-    //  Realiza os cálculos de INSS e IR.
-    //  Salva tudo no banco.
-    //  Gera o CSV de saída no local especificado pelo usuário.
-
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         //Lê o CSV de entrada
         CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
-        // cria objetos
+
         List<Funcionario> func = resultado.getFuncionarios();
         List<Dependente> dep = resultado.getDependentes();
+        List<FolhaDePagamento> fp = new ArrayList<>();
 
-        System.out.println(func.toString());
-        //System.out.println("\n\n");
-        //System.out.println("Dependentes: \n");
-        //System.out.println(dep.toString());
-        // gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
+        fp = calcularImpostos(func, dep);
+        // todo - Salva tudo no banco.
+
+        // todo - gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
     }
 
     private static void listarDepartamentos() {
@@ -151,5 +150,25 @@ public class Main {
             System.out.println(departamento);
         }
         System.out.println("\n\n");
+    }
+
+    private static List<FolhaDePagamento> calcularImpostos(List<Funcionario> func, List<Dependente> dep) {
+        List<FolhaDePagamento> fp = new ArrayList<>();
+
+        for (Funcionario f : func) {
+            String cpf_funcionario = f.getCpf();
+            double salario_bruto = f.getSalarioBruto();
+            double inss = calcularInss(salario_bruto);
+            int quantidadeDependentes = (int) dep.stream()
+                    .filter(d -> d.getCpfFuncionario().equals(cpf_funcionario))
+                    .count();
+            LocalDate data = LocalDate.now();
+            double ir  = calcularIRRF(salario_bruto, inss, quantidadeDependentes);
+            FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data , inss, ir);
+            folhaDePagamento.setLiquido(salario_bruto - inss - ir);
+            fp.add(folhaDePagamento);
+        }
+
+        return fp;
     }
 }

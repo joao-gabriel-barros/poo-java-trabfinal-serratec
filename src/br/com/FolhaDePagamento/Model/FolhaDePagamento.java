@@ -10,13 +10,20 @@ public class FolhaDePagamento {
     private double ir;
     private double liquido;
 
+    public FolhaDePagamento(String cpf_funcionario, LocalDate data, double inss, double ir) {
+        this.cpf_funcionario = cpf_funcionario;
+        this.data = data;
+        this.inss = inss;
+        this.ir = ir;
+    }
+
     public FolhaDePagamento(int id, String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
         this.id = id;
         this.cpf_funcionario = cpf_funcionario;
         this.data = data;
         this.inss = inss;
         this.ir = ir;
-        this.liquido = liquido;
+        setLiquido(liquido);
     }
 
     public int getId() {
@@ -64,6 +71,9 @@ public class FolhaDePagamento {
     }
 
     public void setLiquido(double liquido) {
+        if (liquido < 0) {
+            throw new IllegalArgumentException("Salario liquido no pode ser menor do que zero");
+        }
         this.liquido = liquido;
     }
 
