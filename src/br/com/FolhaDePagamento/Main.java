@@ -22,6 +22,7 @@ import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCs
 
 public class Main {
     public static void main(String[] args) {
+        ConnectionFactory.setVerbose(true);
         try (Connection connection = new ConnectionFactory().getConnection()) {
             DatabaseInitializer.run(connection);
         } catch (SQLException e) {
@@ -143,10 +144,12 @@ public class Main {
         System.out.println("\n\n=================================");
         System.out.println("=== Listagem de Departamentos ===");
         System.out.println("=================================");
+        ConnectionFactory.setVerbose(false);
         DepartamentoDao dep = new DepartamentoDao();
         List<Departamento> departamentos = dep.listar();
         for (Departamento departamento : departamentos) {
             System.out.println(departamento);
         }
+        System.out.println("\n\n");
     }
 }
