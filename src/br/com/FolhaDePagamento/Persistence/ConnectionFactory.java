@@ -9,16 +9,21 @@ public class ConnectionFactory {
     final String usuario = "postgres";
     final String senha = "postgres";
     private Connection connection;
+    private static boolean verbose = false;
+
+    public static void setVerbose(boolean v) {
+        verbose = v;
+    }
 
     // métodos
     public Connection getConnection() {
-        System.out.println("Conectando no banco de dados.....");
+        if (verbose) System.out.println("Conectando no banco de dados.....");
         try {
             connection = DriverManager.getConnection(url, usuario, senha);
             if (connection != null) {
-                System.out.println("\nConectado com sucesso ao banco de dados.....!");
+                if (verbose) System.out.println("\nConectado com sucesso ao banco de dados.....!");
             } else {
-                System.out.println("Erro nos dados da conexão!");
+                if (verbose) System.out.println("Erro nos dados da conexão!");
             }
         } catch (SQLException e) {
             System.err.println("\nNão foi possível conectar...");

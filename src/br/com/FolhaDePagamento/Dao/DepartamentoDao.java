@@ -12,23 +12,17 @@ import java.util.List;
 
 public class DepartamentoDao {
 
-
-    public Connection getConnection() {
-        return new ConnectionFactory().getConnection();
-    }
-
     public List<Departamento> listar() {
         String sql = "SELECT * FROM departamento";
         List<Departamento> departamentos = new ArrayList<>();
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = new ConnectionFactory().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Departamento departamento = new Departamento(rs.getInt("id"), rs.getString("nome"));
                 departamentos.add(departamento);
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao acessar departamentos");
-            e.printStackTrace();
+            System.err.println("Erro ao acessar departamentos: " + e.getMessage());
         }
         return departamentos;
     }
@@ -36,17 +30,17 @@ public class DepartamentoDao {
     public Departamento buscarId(int idDpt) {
         String sql = "SELECT * FROM departamento WHERE id = ?";
         Departamento dpt = null;
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1,idDpt);
-            try (ResultSet rs = stmt.executeQuery()){
-                if (rs.next()){
+        try (Connection conn = new ConnectionFactory().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idDpt);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
                     dpt = new Departamento();
                     dpt.setId(rs.getInt("id"));
                     dpt.setNome(rs.getString("nome"));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Não foi possível achar o departamento pelo ID");
+            System.err.println("Não foi possível achar o departamento pelo ID: " + e.getMessage());
         }
         return dpt;
     }
