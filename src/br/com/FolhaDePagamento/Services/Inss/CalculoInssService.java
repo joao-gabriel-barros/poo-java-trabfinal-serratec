@@ -4,7 +4,7 @@ import br.com.FolhaDePagamento.Interfaces.CalculoINSS;
 
 import static br.com.FolhaDePagamento.Util.ConstantesNegocio.TETO_INSS;
 
-public class CalculoInss implements CalculoINSS {
+public class CalculoInssService implements CalculoINSS {
     double aliquota;
     double parcelaDeduzir;
 
