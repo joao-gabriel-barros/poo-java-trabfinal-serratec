@@ -20,8 +20,6 @@ import java.util.Scanner;
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileReader.lerArquivoCsv;
 import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCsv;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         try (Connection connection = new ConnectionFactory().getConnection()) {
@@ -34,8 +32,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String opcaoDeSaida = "";
 
-        do{
-            try{
+        do {
+            try {
                 exibirMenu();
                 String opcaoMenu = capturarOpcaoMenu(sc);
 
@@ -47,12 +45,7 @@ public class Main {
                         System.out.println("Calcular folha avulsa.");
                         break;
                     case "3":
-                        System.out.println("Listar Todos os Departamentos");
-                        DepartamentoDao dep = new DepartamentoDao();
-                        List<Departamento> departamentos = dep.listar();
-                        for (Departamento departamento : departamentos){
-                            System.out.println(departamento);
-                        }
+                        listarDepartamentos();
                         break;
                     case "4":
                         System.out.println("Listar Funcionários por Departamento");
@@ -74,14 +67,14 @@ public class Main {
                     break;
                 }
 
-            }catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
             }
 
             System.out.println("Deseja sair do sistema(S/N):");
             opcaoDeSaida = sc.nextLine();
         }
-        while(!opcaoDeSaida.equalsIgnoreCase("S"));
+        while (!opcaoDeSaida.equalsIgnoreCase("S"));
 
         sc.close();
         System.out.println("\n\n=================================");
@@ -89,7 +82,7 @@ public class Main {
         System.out.println("=================================");
     }
 
-    public static void exibirMenu(){
+    public static void exibirMenu() {
         System.out.println("\n\n\n===============================================");
         System.out.println("------ Sistema de Pagamentos - Serratec ------- ");
         System.out.println("===============================================");
@@ -142,7 +135,18 @@ public class Main {
         System.out.println(func.toString());
         //System.out.println("\n\n");
         //System.out.println("Dependentes: \n");
-       //System.out.println(dep.toString());
+        //System.out.println(dep.toString());
         // gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
+    }
+
+    private static void listarDepartamentos() {
+        System.out.println("\n\n=================================");
+        System.out.println("=== Listagem de Departamentos ===");
+        System.out.println("=================================");
+        DepartamentoDao dep = new DepartamentoDao();
+        List<Departamento> departamentos = dep.listar();
+        for (Departamento departamento : departamentos) {
+            System.out.println(departamento);
+        }
     }
 }

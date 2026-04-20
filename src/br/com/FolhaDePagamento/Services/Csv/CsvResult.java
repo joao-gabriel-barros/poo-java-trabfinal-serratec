@@ -13,7 +13,6 @@ public class CsvResult {
         this.funcionarios = funcionarios;
         this.dependentes = dependentes;
     }
-
     public List<Funcionario> getFuncionarios() {
         return funcionarios;
     }
