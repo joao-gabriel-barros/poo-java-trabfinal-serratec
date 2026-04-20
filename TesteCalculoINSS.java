@@ -1,4 +1,4 @@
-package FinalPOO;
+ackage FinalPOO;
 
 public class TesteCalculoINSS {
 
