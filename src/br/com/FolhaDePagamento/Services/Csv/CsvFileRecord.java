@@ -34,11 +34,15 @@ public class CsvFileRecord {
                writer.write(linha);
             }
 
-            System.out.println("Arquivo gravado com sucesso em: " + caminhoSaida);
+            System.out.println("\n╔════════════════════════════════════════════╗");
+            System.out.println("║  ✓ Arquivo gravado com sucesso!            ║");
+            System.out.println("╠════════════════════════════════════════════╣");
+            System.out.println("║ Caminho: " + caminhoSaida);
+            System.out.println("║ Registros: " + folhas.size());
+            System.out.println("╚════════════════════════════════════════════╝\n");
 
         } catch (IOException e) {
-            System.out.println("Erro ao gravar arquivo: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("\nErro ao gravar arquivo: " + e.getMessage());
         }
     }
 }
