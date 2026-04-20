@@ -134,6 +134,8 @@ public class Main {
         List<FolhaDePagamento> fp = new ArrayList<>();
 
         fp = calcularImpostos(func, dep);
+
+        System.out.println(fp.toString());
         // todo - Salva tudo no banco.
 
         // todo - gravarArquivoCsv(caminhoDeSaida, folhaDePagamento);
@@ -152,20 +154,24 @@ public class Main {
         System.out.println("\n\n");
     }
 
+    private static double arredondar(double valor) {
+        return Math.round(valor * 100.0) / 100.0;
+    }
+
     private static List<FolhaDePagamento> calcularImpostos(List<Funcionario> func, List<Dependente> dep) {
         List<FolhaDePagamento> fp = new ArrayList<>();
 
         for (Funcionario f : func) {
             String cpf_funcionario = f.getCpf();
             double salario_bruto = f.getSalarioBruto();
-            double inss = calcularInss(salario_bruto);
+            double inss = arredondar(calcularInss(salario_bruto));
             int quantidadeDependentes = (int) dep.stream()
                     .filter(d -> d.getCpfFuncionario().equals(cpf_funcionario))
                     .count();
             LocalDate data = LocalDate.now();
-            double ir  = calcularIRRF(salario_bruto, inss, quantidadeDependentes);
+            double ir  = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
             FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data , inss, ir);
-            folhaDePagamento.setLiquido(salario_bruto - inss - ir);
+            folhaDePagamento.setLiquido(arredondar(salario_bruto - inss - ir));
             fp.add(folhaDePagamento);
         }
 

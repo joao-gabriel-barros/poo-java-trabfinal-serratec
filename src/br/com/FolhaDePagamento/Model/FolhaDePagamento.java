@@ -17,21 +17,12 @@ public class FolhaDePagamento {
         this.ir = ir;
     }
 
-    public FolhaDePagamento(int id, String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
-        this.id = id;
+    public FolhaDePagamento( String cpf_funcionario, LocalDate data, double inss, double ir, double liquido) {
         this.cpf_funcionario = cpf_funcionario;
         this.data = data;
         this.inss = inss;
         this.ir = ir;
         setLiquido(liquido);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCpf_funcionario() {
@@ -80,12 +71,11 @@ public class FolhaDePagamento {
     @Override
     public String toString() {
         return "FolhaDePagamento { " +
-                "id=" + id +
-                ", cpf_funcionario='" + cpf_funcionario + '\'' +
+                "cpf_funcionario='" + cpf_funcionario + '\'' +
                 ", data=" + data +
                 ", inss=" + inss +
                 ", ir=" + ir +
                 ", liquido=" + liquido +
-                '}';
+                '}' + "\n";
     }
 }
