@@ -1,7 +1,9 @@
 package br.com.FolhaDePagamento.Interfaces;
 
 public interface CalculoINSS {
-	
-  double calcular(double salarioBruto);
-  
+
+    static double calcular(double salarioBruto) {
+        return 0;
+    }
+
 }
