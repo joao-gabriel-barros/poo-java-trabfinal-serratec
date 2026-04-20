@@ -1,6 +1,6 @@
 package br.com.FolhaDePagamento.Interfaces;
 
-	public interface CalculoSalarioLiquidoFinal {
+	public interface CalculoSalarioLiquido {
 	    
 		double calcularSalario(double salarioBruto, double inss, double irpf);
 }
