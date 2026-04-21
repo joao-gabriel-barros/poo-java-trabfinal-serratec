@@ -151,6 +151,7 @@ public class Main {
         double salario_bruto = lerDouble(sc, "Digite o salário bruto: ");
         listarDepartamentos();
         int id  = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
+
     }
 
     private static void listarDepartamentos() {
