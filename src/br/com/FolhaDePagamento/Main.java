@@ -21,6 +21,7 @@ import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCs
 import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
 import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
 import static br.com.FolhaDePagamento.Services.SalarioLiquidoFinal.CalculoSalarioLiquidoService.salarioLiquido;
+import static br.com.FolhaDePagamento.Util.ConstantesNegocio.FORMATTER_BR;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,6 +47,7 @@ public class Main {
                         break;
                     case "2":
                         System.out.println("Calcular folha avulsa.");
+                        calcularFolhaAvulsa(sc);
                         break;
                     case "3":
                         listarDepartamentos();
@@ -120,6 +122,11 @@ public class Main {
         return sc.nextLine();
     }
 
+    private static double lerDouble(Scanner sc, String mensagem) {
+        System.out.print(mensagem);
+        return sc.nextDouble();
+    }
+
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
@@ -135,6 +142,15 @@ public class Main {
         salvarNoBancoFolhaDePagamento(fp);
 
         gravarArquivoCsv(caminhoDeSaida, fp, func);
+    }
+
+    private static void calcularFolhaAvulsa(Scanner sc) {
+        String cpf = lerString(sc, "Digite o cpf do funcionário: ");
+        String nome = lerString(sc, "Digite o nome: ");
+        LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
+        double salario_bruto = lerDouble(sc, "Digite o salário bruto: ");
+        listarDepartamentos();
+        int id  = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
     }
 
     private static void listarDepartamentos() {
