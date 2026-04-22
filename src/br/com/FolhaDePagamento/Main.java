@@ -2,6 +2,7 @@ package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
 import br.com.FolhaDePagamento.Dao.FuncionarioDao;
+import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Model.Dependente;
@@ -11,7 +12,6 @@ import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
 import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
 import br.com.FolhaDePagamento.Services.Csv.CsvResult;
-import br.com.FolhaDePagamento.Services.Validators.CpfValidator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -148,8 +148,12 @@ public class Main {
     }
 
     private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
+        List<Funcionario> func = new ArrayList<>();
+        List<Dependente> dep = new ArrayList<>();
+        List<FolhaDePagamento> fp = new ArrayList<>();
+
         String cpf = lerString(sc, "Digite o cpf do funcionário: ");
-        while(!isValido(cpf)) {
+        while (!isValido(cpf)) {
             System.out.println("Cpf inválido. Tente novamente. ");
             cpf = lerString(sc, "Digite o cpf do funcionário novamente: ");
         }
@@ -162,9 +166,17 @@ public class Main {
         listarDepartamentos();
         int id = lerIdDepartamentoValidado(sc);
 
-        Funcionario funcionario = new Funcionario(cpf, nome,nascimento, salario_bruto, id);
+        Funcionario funcionario = new Funcionario(cpf, nome, nascimento, salario_bruto, id);
+        func.add(funcionario);
+
         FuncionarioDao funcionarioDao = new FuncionarioDao();
         funcionarioDao.inserir(funcionario);
+
+        fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
+        FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf, LocalDate.now(), );
+
+
+        System.out.print(fp.toString());
     }
 
     private static void listarDepartamentos() {
@@ -207,6 +219,30 @@ public class Main {
         return id;
     }
 
+    private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
+        String opcaoDeSaida = "";
+
+        do {
+            String cpf = lerString(sc, "Digite o cpf do dependente: ");
+            while (!isValido(cpf)) {
+                System.out.println("Cpf inválido. Tente novamente. ");
+                cpf = lerString(sc, "Digite o cpf do dependente novamente: ");
+            }
+
+            String nome = lerString(sc, "Digite o nome: ");
+            LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
+            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: "));
+
+            Dependente dependente = new Dependente(cpf, nome, nascimento, parentesco, cpf_funcionario);
+            dep.add(dependente);
+
+            System.out.println("Deseja sair do sistema(S/N):");
+            opcaoDeSaida = sc.nextLine();
+        } while (opcaoDeSaida.equalsIgnoreCase("S"));
+
+        return dep;
+    }
+
     private static double arredondar(double valor) {
         return Math.round(valor * 100.0) / 100.0;
     }
@@ -222,8 +258,8 @@ public class Main {
                     .filter(d -> d.getCpfFuncionario().equals(cpf_funcionario))
                     .count();
             LocalDate data = LocalDate.now();
-            double ir  = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
-            FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data , inss, ir);
+            double ir = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
+            FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data, inss, ir);
             folhaDePagamento.setLiquido(arredondar(salarioLiquido(salario_bruto, inss, ir)));
             fp.add(folhaDePagamento);
         }
@@ -231,7 +267,7 @@ public class Main {
         return fp;
     }
 
-    private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp){
+    private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp) {
         System.out.println(fp.toString());
         System.out.println("salvo com sucesso no banco.");
     }
