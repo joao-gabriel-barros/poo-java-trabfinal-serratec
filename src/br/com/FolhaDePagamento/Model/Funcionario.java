@@ -1,6 +1,8 @@
 package br.com.FolhaDePagamento.Model;
 
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
+import br.com.FolhaDePagamento.Exceptions.SalarioInvalidoException;
+import br.com.FolhaDePagamento.Services.Validators.SalarioValidator;
 
 import java.time.LocalDate;
 
@@ -10,7 +12,7 @@ public final class Funcionario extends Pessoa {
 
     public Funcionario(String cpf, String nome, LocalDate nascimento, double salarioBruto, int idDepartamento) throws CpfInvalidoException {
         super(cpf, nome, nascimento);
-        this.salarioBruto = salarioBruto;
+        setSalarioBruto(salarioBruto);
         this.idDepartamento = idDepartamento;
     }
 
@@ -18,8 +20,9 @@ public final class Funcionario extends Pessoa {
         return salarioBruto;
     }
 
-    public void setSalarioBruto(double salarioBruto) {
-        this.salarioBruto = salarioBruto;
+    public void setSalarioBruto (double salarioBruto) throws SalarioInvalidoException {
+       SalarioValidator.validaSalario(salarioBruto);
+       this.salarioBruto = salarioBruto;
     }
 
     public int getIdDepartamento() {
