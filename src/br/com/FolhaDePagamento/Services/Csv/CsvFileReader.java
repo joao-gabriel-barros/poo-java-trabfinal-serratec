@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
+import br.com.FolhaDePagamento.Exceptions.DependenteSemTitularException;
 import br.com.FolhaDePagamento.Model.Dependente;
 import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Model.Departamento;
@@ -53,14 +54,23 @@ public class CsvFileReader {
                         Funcionario funcionario = new Funcionario(cpfFuncionario, nome, dataNascimento, salario, IdDepartamento);
                         funcionarios.add(funcionario);
                     } else if (campos.length == 4) {
+                        if (cpfFuncionario.isBlank()) {
+                            throw new DependenteSemTitularException(
+                                    "Linha " + numeroLinha + ": Dependente sem funcionário titular: " + campos[0]
+                            );
+                        }
+
                         String nome = campos[0].trim();
                         String cpf = campos[1].trim();
+
                         if (!CpfValidator.isValido(cpf)) {
                             System.err.println("Linha " + numeroLinha + " ignorada (CPF inválido): " + cpf);
                             continue;
                         }
+
                         LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
                         Parentesco parentesco = Parentesco.valueOf(campos[3].trim().toUpperCase());
+
                         Dependente dependente = new Dependente(cpf, nome, dataNascimento, parentesco, cpfFuncionario);
                         dependentes.add(dependente);
                     } else {
