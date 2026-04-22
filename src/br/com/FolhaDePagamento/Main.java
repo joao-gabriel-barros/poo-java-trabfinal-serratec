@@ -59,9 +59,11 @@ public class Main {
                         break;
                     case "4":
                         System.out.println("Listar Funcionários por Departamento");
+                        listarFuncionariosPorDepartamento();
                         break;
                     case "5":
                         System.out.println("Listar Histórico de Folhas de Pagamento");
+                        listarFolhasDePagamentos();
                         break;
                     case "6":
                         testarConexaoComBancoDeDados();
@@ -243,6 +245,15 @@ public class Main {
         for (Departamento departamento : departamentos) {
             System.out.println(departamento);
         }
+    }
+
+    private static void listarFuncionariosPorDepartamento() {
+
+    }
+
+    private static void listarFolhasDePagamentos(){
+        FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
+        folhaDePagamentoDao.listar();
     }
 
     private static boolean verificarIdDepartamentoExiste(int id) {
