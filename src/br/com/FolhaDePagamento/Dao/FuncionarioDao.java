@@ -22,11 +22,10 @@ public class FuncionarioDao {
             stmt.setString(2, funcionario.getNome());
             stmt.setDate(3, java.sql.Date.valueOf(funcionario.getNascimento()));
             stmt.setDouble(4, funcionario.getSalarioBruto());
-            stmt.setInt(5, funcionario.getDepartamento().getId());
+            stmt.setInt(5, funcionario.getIdDepartamento());
             stmt.execute();
         } catch (SQLException e) {
             System.err.println("Não foi possível inserir o funcionário no banco de dados");
-            e.printStackTrace();
         }
     }
 
@@ -46,12 +45,11 @@ public class FuncionarioDao {
                         rs.getString("nome"),
                         rs.getDate("nascimento").toLocalDate(),
                         rs.getDouble("salario_bruto"),
-                        departamento);
+                        departamento.getId());
                 funcionarios.add(funcionario);
             }
         } catch (SQLException | CpfInvalidoException e) {
             System.err.println("Não foi possível recuperar os funcionários do banco");
-            e.printStackTrace();
         }
         return funcionarios;
     }

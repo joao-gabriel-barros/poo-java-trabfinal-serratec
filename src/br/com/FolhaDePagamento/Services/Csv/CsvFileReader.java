@@ -35,9 +35,8 @@ public class CsvFileReader {
                     cpfFuncionario = campos[1].trim();
                     LocalDate dataNascimento = LocalDate.parse(campos[2].trim(), formatter);
                     double salario = Double.parseDouble(campos[3].trim());
-                    departamento = new Departamento();
-                    departamento.setId(Integer.parseInt(campos[4].trim()));
-                    Funcionario funcionario = new Funcionario(cpfFuncionario, nome, dataNascimento, salario, departamento);
+                    int IdDepartamento = Integer.parseInt(campos[4].trim());
+                    Funcionario funcionario = new Funcionario(cpfFuncionario, nome, dataNascimento, salario, IdDepartamento);
                     funcionarios.add(funcionario);
                 } else if (campos.length >= 4) {
                     String nome = campos[0].trim();

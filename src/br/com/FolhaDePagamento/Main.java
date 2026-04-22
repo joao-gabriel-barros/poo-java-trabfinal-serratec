@@ -1,6 +1,9 @@
 package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
+import br.com.FolhaDePagamento.Dao.FuncionarioDao;
+import br.com.FolhaDePagamento.Enum.Parentesco;
+import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Model.Dependente;
 import br.com.FolhaDePagamento.Model.FolhaDePagamento;
@@ -21,6 +24,8 @@ import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCs
 import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
 import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
 import static br.com.FolhaDePagamento.Services.SalarioLiquidoFinal.CalculoSalarioLiquidoService.salarioLiquido;
+import static br.com.FolhaDePagamento.Services.Validators.CpfValidator.isValido;
+import static br.com.FolhaDePagamento.Util.ConstantesNegocio.FORMATTER_BR;
 
 public class Main {
     public static void main(String[] args) {
@@ -45,7 +50,7 @@ public class Main {
                         calcularLoteViaArquivo(sc);
                         break;
                     case "2":
-                        System.out.println("Calcular folha avulsa.");
+                        calcularFolhaAvulsa(sc);
                         break;
                     case "3":
                         listarDepartamentos();
@@ -86,7 +91,7 @@ public class Main {
     }
 
     public static void exibirMenu() {
-        System.out.println("\n\n\n===============================================");
+        System.out.println("\n\n===============================================");
         System.out.println("------ Sistema de Pagamentos - Serratec ------- ");
         System.out.println("===============================================");
         System.out.println("\n --- PROCESSAMENTO DE DADOS ---");
@@ -120,6 +125,11 @@ public class Main {
         return sc.nextLine();
     }
 
+    private static double lerDouble(Scanner sc, String mensagem) {
+        System.out.print(mensagem);
+        return sc.nextDouble();
+    }
+
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
@@ -137,8 +147,37 @@ public class Main {
         gravarArquivoCsv(caminhoDeSaida, fp, func);
     }
 
+    private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
+        List<Funcionario> func = new ArrayList<>();
+        List<Dependente> dep = new ArrayList<>();
+        List<FolhaDePagamento> fp = new ArrayList<>();
+
+        String cpf = lerString(sc, "Digite o cpf do funcionário: ");
+        while (!isValido(cpf)) {
+            System.out.println("Cpf inválido. Tente novamente. ");
+            cpf = lerString(sc, "Digite o cpf do funcionário novamente: ");
+        }
+
+        String nome = lerString(sc, "Digite o nome: ");
+        LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
+        double salario_bruto = lerDouble(sc, "Digite o salário bruto: ");
+        sc.nextLine();
+
+        listarDepartamentos();
+        int id = lerIdDepartamentoValidado(sc);
+
+        Funcionario funcionario = new Funcionario(cpf, nome, nascimento, salario_bruto, id);
+        func.add(funcionario);
+
+        FuncionarioDao funcionarioDao = new FuncionarioDao();
+        funcionarioDao.inserir(funcionario);
+
+        fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
+
+    }
+
     private static void listarDepartamentos() {
-        System.out.println("\n\n=================================");
+        System.out.println("\n=================================");
         System.out.println("=== Listagem de Departamentos ===");
         System.out.println("=================================");
         ConnectionFactory.setVerbose(false);
@@ -147,7 +186,59 @@ public class Main {
         for (Departamento departamento : departamentos) {
             System.out.println(departamento);
         }
-        System.out.println("\n\n");
+    }
+
+    private static boolean verificarIdDepartamentoExiste(int id) {
+        DepartamentoDao dep = new DepartamentoDao();
+        List<Departamento> departamentos = dep.listar();
+
+        return departamentos.stream().anyMatch(departamento -> departamento.getId() == id);
+    }
+
+    private static int lerIdDepartamentoValidado(Scanner sc) {
+        int id = -1;
+        boolean valido = false;
+
+        while (!valido) {
+            try {
+                id = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
+
+                if (verificarIdDepartamentoExiste(id)) {
+                    valido = true;
+                } else {
+                    System.out.println("ID inválido! Tente novamente.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite um número.");
+            }
+        }
+
+        return id;
+    }
+
+    private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
+        String opcaoDeSaida = "";
+
+        System.out.println("Digite agora os dados do(s) dependente(s): ");
+        do {
+            String cpf = lerString(sc, "Digite o cpf do dependente: ");
+            while (!isValido(cpf)) {
+                System.out.println("Cpf inválido. Tente novamente. ");
+                cpf = lerString(sc, "Digite o cpf do dependente novamente: ");
+            }
+
+            String nome = lerString(sc, "Digite o nome: ");
+            LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
+            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: ").toUpperCase());
+
+            Dependente dependente = new Dependente(cpf, nome, nascimento, parentesco, cpf_funcionario);
+            dep.add(dependente);
+
+            System.out.println("Deseja cadastrar outro dependente(S/N):");
+            opcaoDeSaida = sc.nextLine();
+        } while (opcaoDeSaida.equalsIgnoreCase("S"));
+
+        return dep;
     }
 
     private static double arredondar(double valor) {
@@ -165,8 +256,8 @@ public class Main {
                     .filter(d -> d.getCpfFuncionario().equals(cpf_funcionario))
                     .count();
             LocalDate data = LocalDate.now();
-            double ir  = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
-            FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data , inss, ir);
+            double ir = arredondar(calcularIRRF(salario_bruto, inss, quantidadeDependentes));
+            FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf_funcionario, data, inss, ir);
             folhaDePagamento.setLiquido(arredondar(salarioLiquido(salario_bruto, inss, ir)));
             fp.add(folhaDePagamento);
         }
@@ -174,7 +265,7 @@ public class Main {
         return fp;
     }
 
-    private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp){
+    private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp) {
         System.out.println(fp.toString());
         System.out.println("salvo com sucesso no banco.");
     }
