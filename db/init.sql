@@ -1,14 +1,14 @@
-DROP TABLE IF EXISTS folha_pagamento CASCADE;
-DROP TABLE IF EXISTS dependente CASCADE;
-DROP TABLE IF EXISTS funcionario CASCADE;
+-- DROP TABLE IF EXISTS folha_pagamento CASCADE;
+-- DROP TABLE IF EXISTS dependente CASCADE;
+-- DROP TABLE IF EXISTS funcionario CASCADE;
 DROP TABLE IF EXISTS departamento CASCADE;
 
-CREATE TABLE departamento (
+CREATE TABLE IF NOT EXISTS departamento (
                               id SERIAL PRIMARY KEY,
                               nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE funcionario (
+CREATE TABLE IF NOT EXISTS funcionario (
                              cpf VARCHAR(11) NOT NULL PRIMARY KEY,
                              nome VARCHAR(100),
                              nascimento DATE NOT NULL CHECK (nascimento <= CURRENT_DATE),
@@ -19,7 +19,7 @@ CREATE TABLE funcionario (
                                      REFERENCES departamento(id)
 );
 
-CREATE TABLE dependente (
+CREATE TABLE IF NOT EXISTS dependente (
                             cpf VARCHAR(11) NOT NULL PRIMARY KEY,
                             nome VARCHAR(100),
                             nascimento DATE NOT NULL CHECK (nascimento <= CURRENT_DATE),
@@ -30,7 +30,7 @@ CREATE TABLE dependente (
                                     REFERENCES funcionario(cpf)
 );
 
-CREATE TABLE folha_pagamento (
+CREATE TABLE IF NOT EXISTS folha_pagamento (
                                  id SERIAL PRIMARY KEY,
                                  cpf_funcionario VARCHAR(11),
                                  data DATE NOT NULL CHECK(data <= CURRENT_DATE),
@@ -46,4 +46,5 @@ INSERT INTO departamento (nome) VALUES
                                     ('Recursos Humanos'),
                                     ('Tecnologia da Informação'),
                                     ('Financeiro'),
-                                    ('Operações');
+                                    ('Operações')
+ON CONFLICT (id) DO NOTHING;
