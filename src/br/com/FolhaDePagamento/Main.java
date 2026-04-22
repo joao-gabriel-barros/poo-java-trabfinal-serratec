@@ -11,6 +11,7 @@ import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 import br.com.FolhaDePagamento.Persistence.DatabaseInitializer;
 import br.com.FolhaDePagamento.Services.Csv.CsvFileReader;
 import br.com.FolhaDePagamento.Services.Csv.CsvResult;
+import br.com.FolhaDePagamento.Services.Validators.CpfValidator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,6 +24,7 @@ import static br.com.FolhaDePagamento.Services.Csv.CsvFileRecord.gravarArquivoCs
 import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularInss;
 import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
 import static br.com.FolhaDePagamento.Services.SalarioLiquidoFinal.CalculoSalarioLiquidoService.salarioLiquido;
+import static br.com.FolhaDePagamento.Services.Validators.CpfValidator.isValido;
 import static br.com.FolhaDePagamento.Util.ConstantesNegocio.FORMATTER_BR;
 
 public class Main {
@@ -147,6 +149,11 @@ public class Main {
 
     private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
         String cpf = lerString(sc, "Digite o cpf do funcionário: ");
+        while(!isValido(cpf)) {
+            System.out.println("Cpf inválido. Tente novamente. ");
+            cpf = lerString(sc, "Digite o cpf do funcionário novamente: ");
+        }
+
         String nome = lerString(sc, "Digite o nome: ");
         LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
         double salario_bruto = lerDouble(sc, "Digite o salário bruto: ");
