@@ -247,7 +247,9 @@ public class Main {
     }
 
     private static void listarFuncionariosPorDepartamento() {
-
+        ConnectionFactory.setVerbose(false);
+        FuncionarioDao funcionarioDao = new FuncionarioDao();
+        funcionarioDao.exibirFuncionariosPorDepartamento();
     }
 
     private static void listarFolhasDePagamentos() {
