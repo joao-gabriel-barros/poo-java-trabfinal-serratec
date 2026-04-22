@@ -1,6 +1,8 @@
 package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
+import br.com.FolhaDePagamento.Dao.DependenteDao;
+import br.com.FolhaDePagamento.Dao.FolhaDePagamentoDao;
 import br.com.FolhaDePagamento.Dao.FuncionarioDao;
 import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
@@ -142,6 +144,8 @@ public class Main {
 
         fp = calcularImpostos(func, dep);
 
+        salvarNoBancoFuncionario(func);
+        salvarNoBancoDependente(dep);
         salvarNoBancoFolhaDePagamento(fp);
 
         gravarArquivoCsv(caminhoDeSaida, fp, func);
@@ -169,11 +173,16 @@ public class Main {
         Funcionario funcionario = new Funcionario(cpf, nome, nascimento, salario_bruto, id);
         func.add(funcionario);
 
-        FuncionarioDao funcionarioDao = new FuncionarioDao();
-        funcionarioDao.inserir(funcionario);
+        salvarNoBancoFuncionario(func);
 
-        fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
+        List<Dependente> dependentesLidos = lerDependentes(sc, dep, cpf);
+        salvarNoBancoDependente(dependentesLidos);
 
+        fp = calcularImpostos(func, dependentesLidos);
+
+        exibirRecibo(funcionario, fp.get(0));
+
+        salvarNoBancoFolhaDePagamento(fp);
     }
 
     private static void listarDepartamentos() {
@@ -219,7 +228,9 @@ public class Main {
     private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
         String opcaoDeSaida = "";
 
-        System.out.println("Digite agora os dados do(s) dependente(s): ");
+        System.out.println("\n=================================");
+        System.out.println("====  Dados dos Dependentes  ====");
+        System.out.println("=================================");
         do {
             String cpf = lerString(sc, "Digite o cpf do dependente: ");
             while (!isValido(cpf)) {
@@ -265,8 +276,58 @@ public class Main {
         return fp;
     }
 
+    private static void salvarNoBancoFuncionario(List<Funcionario> func) {
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            FuncionarioDao funcDao = new FuncionarioDao();
+            funcDao.inserirLista(func);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private static void salvarNoBancoDependente(List<Dependente> dep) {
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            DependenteDao depDao = new DependenteDao();
+            depDao.inserirLista(dep);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp) {
-        System.out.println(fp.toString());
-        System.out.println("salvo com sucesso no banco.");
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            FolhaDePagamentoDao folhaDao = new FolhaDePagamentoDao();
+            folhaDao.inserirLista(fp);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private static void exibirRecibo(Funcionario funcionario, FolhaDePagamento folha) {
+        System.out.println("\n\n");
+        System.out.println("╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║                      RECIBO DE PAGAMENTO                   ║");
+        System.out.println("║                    SERRATEC - RH SYSTEM                    ║");
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-55s    ║%n", "Funcionário: " + funcionario.getNome());
+        System.out.printf("║ %-55s    ║%n", "CPF: " + funcionario.getCpf());
+        System.out.printf("║ %-55s    ║%n", "Data: " + LocalDate.now());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Salário Bruto:", funcionario.getSalarioBruto());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Desconto INSS:", folha.getInss());
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Desconto IR:", folha.getIr());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "SALÁRIO LÍQUIDO:", folha.getLiquido());
+        System.out.println("╚════════════════════════════════════════════════════════════╝\n");
     }
 }
