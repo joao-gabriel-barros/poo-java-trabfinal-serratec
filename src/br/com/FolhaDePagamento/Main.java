@@ -58,7 +58,6 @@ public class Main {
                         listarDepartamentos();
                         break;
                     case "4":
-                        System.out.println("Listar Funcionários por Departamento");
                         listarFuncionariosPorDepartamento();
                         break;
                     case "5":
