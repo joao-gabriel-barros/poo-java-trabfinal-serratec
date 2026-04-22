@@ -70,12 +70,10 @@ public class FolhaDePagamento {
 
     @Override
     public String toString() {
-        return "FolhaDePagamento { " +
-                "cpf_funcionario='" + cpf_funcionario + '\'' +
-                ", data=" + data +
-                ", inss=" + inss +
-                ", ir=" + ir +
-                ", liquido=" + liquido +
-                '}' + "\n";
+        return  "cpf funcionário = '" + cpf_funcionario +
+                " | data da emissão = " + data +
+                " | inss = R$" + inss +
+                " | ir = R$" + ir +
+                " | salário liquido = R$" + liquido;
     }
 }

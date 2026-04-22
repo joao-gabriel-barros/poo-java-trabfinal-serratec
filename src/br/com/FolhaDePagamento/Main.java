@@ -262,6 +262,7 @@ public class Main {
         for (FolhaDePagamento folha : folhasDePagamentos) {
             System.out.println(folha);
         }
+        System.out.println("\n");
     }
 
     private static boolean verificarIdDepartamentoExiste(int id) {
