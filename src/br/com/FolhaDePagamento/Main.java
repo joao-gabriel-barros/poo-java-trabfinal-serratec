@@ -173,8 +173,7 @@ public class Main {
         funcionarioDao.inserir(funcionario);
 
         fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
-        FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf, LocalDate.now(), );
-
+        // FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf, LocalDate.now(), );
 
         System.out.print(fp.toString());
     }
@@ -222,6 +221,7 @@ public class Main {
     private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
         String opcaoDeSaida = "";
 
+        System.out.println("Digite agora os dados do(s) dependente(s): ");
         do {
             String cpf = lerString(sc, "Digite o cpf do dependente: ");
             while (!isValido(cpf)) {
@@ -231,12 +231,12 @@ public class Main {
 
             String nome = lerString(sc, "Digite o nome: ");
             LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
-            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: "));
+            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: ").toUpperCase());
 
             Dependente dependente = new Dependente(cpf, nome, nascimento, parentesco, cpf_funcionario);
             dep.add(dependente);
 
-            System.out.println("Deseja sair do sistema(S/N):");
+            System.out.println("Deseja cadastrar outro dependente(S/N):");
             opcaoDeSaida = sc.nextLine();
         } while (opcaoDeSaida.equalsIgnoreCase("S"));
 
