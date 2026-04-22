@@ -184,7 +184,7 @@ public class Main {
 
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
-        String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
+        String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de saída: ");
 
         CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
 
@@ -251,9 +251,17 @@ public class Main {
 
     }
 
-    private static void listarFolhasDePagamentos(){
+    private static void listarFolhasDePagamentos() {
+        System.out.println("\n===================================");
+        System.out.println("= Histórico de Folhas de Pagamento =");
+        System.out.println("===================================");
+
+        ConnectionFactory.setVerbose(false);
         FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
-        folhaDePagamentoDao.listar();
+        List<FolhaDePagamento> folhasDePagamentos = folhaDePagamentoDao.listar();
+        for (FolhaDePagamento folha : folhasDePagamentos) {
+            System.out.println(folha);
+        }
     }
 
     private static boolean verificarIdDepartamentoExiste(int id) {
@@ -293,8 +301,7 @@ public class Main {
 
             FuncionarioDao funcDao = new FuncionarioDao();
             funcDao.inserirLista(func);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -305,8 +312,7 @@ public class Main {
 
             DependenteDao depDao = new DependenteDao();
             depDao.inserirLista(dep);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -317,8 +323,7 @@ public class Main {
 
             FolhaDePagamentoDao folhaDao = new FolhaDePagamentoDao();
             folhaDao.inserirLista(fp);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }

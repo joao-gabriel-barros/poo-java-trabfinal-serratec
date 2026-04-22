@@ -42,9 +42,8 @@ CREATE TABLE IF NOT EXISTS folha_pagamento (
                                          REFERENCES funcionario(cpf)
 );
 
-INSERT INTO departamento (nome) VALUES
-                                    ('Recursos Humanos'),
-                                    ('Tecnologia da Informação'),
-                                    ('Financeiro'),
-                                    ('Operações')
-ON CONFLICT (id) DO NOTHING;
+-- INSERT INTO departamento (nome) VALUES
+                                   -- ('Recursos Humanos'),
+                                    --('Tecnologia da Informação'),
+                                    --('Financeiro'),
+                                    --('Operações');
