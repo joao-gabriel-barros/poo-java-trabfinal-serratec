@@ -26,7 +26,6 @@ public class FuncionarioDao {
             stmt.execute();
         } catch (SQLException e) {
             System.err.println("Não foi possível inserir o funcionário no banco de dados");
-            e.printStackTrace();
         }
     }
 
@@ -46,12 +45,11 @@ public class FuncionarioDao {
                         rs.getString("nome"),
                         rs.getDate("nascimento").toLocalDate(),
                         rs.getDouble("salario_bruto"),
-                        departamento);
+                        departamento.getId());
                 funcionarios.add(funcionario);
             }
         } catch (SQLException | CpfInvalidoException e) {
             System.err.println("Não foi possível recuperar os funcionários do banco");
-            e.printStackTrace();
         }
         return funcionarios;
     }

@@ -6,12 +6,12 @@ import java.time.LocalDate;
 
 public final class Funcionario extends Pessoa {
     private double salarioBruto;
-    private Departamento departamento;
+    private int idDepartamento;
 
-    public Funcionario(String cpf, String nome, LocalDate nascimento, double salarioBruto, Departamento departamento) throws CpfInvalidoException {
+    public Funcionario(String cpf, String nome, LocalDate nascimento, double salarioBruto, int idDepartamento) throws CpfInvalidoException {
         super(cpf, nome, nascimento);
         this.salarioBruto = salarioBruto;
-        this.departamento = departamento;
+        this.idDepartamento = idDepartamento;
     }
 
     public double getSalarioBruto() {
@@ -22,22 +22,22 @@ public final class Funcionario extends Pessoa {
         this.salarioBruto = salarioBruto;
     }
 
-    public Departamento getDepartamento() {
-        return departamento;
+    public int getIdDepartamento() {
+        return idDepartamento;
     }
 
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
+    public void setIdDepartamento(int idDepartamento) {
+        this.idDepartamento = idDepartamento;
     }
 
     @Override
     public String toString() {
-        return "Funcionario{" +
+        return "Funcionário { " +
                 "Nome = '" + nome + '\'' +
                 ", CPF = '" + cpf + '\'' +
                 ", Nascimento = " + nascimento +
-                ", Departamento = {" + departamento +
-                "}, Salário Bruto = " + salarioBruto +
+                ", ID Departamento = " + idDepartamento +
+                ", Salário Bruto = " + salarioBruto +
                 '}' + "\n";
     }
 }

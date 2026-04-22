@@ -29,7 +29,6 @@ public class DependenteDao {
             stmt.execute();
         } catch (SQLException e) {
             System.err.println("Não foi possível inserir o dependente no banco de dados");
-            e.printStackTrace();
         }
     }
 
@@ -50,7 +49,6 @@ public class DependenteDao {
             }
         } catch (SQLException e) {
             System.err.println("Não foi possível recuperar os dependentes no banco");
-            e.printStackTrace();
         } catch (CpfInvalidoException e) {
             throw new RuntimeException(e);
         }

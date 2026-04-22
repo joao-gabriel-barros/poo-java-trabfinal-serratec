@@ -1,6 +1,8 @@
 package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
+import br.com.FolhaDePagamento.Dao.FuncionarioDao;
+import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Model.Dependente;
 import br.com.FolhaDePagamento.Model.FolhaDePagamento;
@@ -46,7 +48,6 @@ public class Main {
                         calcularLoteViaArquivo(sc);
                         break;
                     case "2":
-                        System.out.println("Calcular folha avulsa.");
                         calcularFolhaAvulsa(sc);
                         break;
                     case "3":
@@ -88,7 +89,7 @@ public class Main {
     }
 
     public static void exibirMenu() {
-        System.out.println("\n\n\n===============================================");
+        System.out.println("\n\n===============================================");
         System.out.println("------ Sistema de Pagamentos - Serratec ------- ");
         System.out.println("===============================================");
         System.out.println("\n --- PROCESSAMENTO DE DADOS ---");
@@ -144,18 +145,23 @@ public class Main {
         gravarArquivoCsv(caminhoDeSaida, fp, func);
     }
 
-    private static void calcularFolhaAvulsa(Scanner sc) {
+    private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
         String cpf = lerString(sc, "Digite o cpf do funcionário: ");
         String nome = lerString(sc, "Digite o nome: ");
         LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
         double salario_bruto = lerDouble(sc, "Digite o salário bruto: ");
-        listarDepartamentos();
-        int id  = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
+        sc.nextLine();
 
+        listarDepartamentos();
+        int id = lerIdDepartamentoValidado(sc);
+
+        Funcionario funcionario = new Funcionario(cpf, nome,nascimento, salario_bruto, id);
+        FuncionarioDao funcionarioDao = new FuncionarioDao();
+        funcionarioDao.inserir(funcionario);
     }
 
     private static void listarDepartamentos() {
-        System.out.println("\n\n=================================");
+        System.out.println("\n=================================");
         System.out.println("=== Listagem de Departamentos ===");
         System.out.println("=================================");
         ConnectionFactory.setVerbose(false);
@@ -164,7 +170,34 @@ public class Main {
         for (Departamento departamento : departamentos) {
             System.out.println(departamento);
         }
-        System.out.println("\n\n");
+    }
+
+    private static boolean verificarIdDepartamentoExiste(int id) {
+        DepartamentoDao dep = new DepartamentoDao();
+        List<Departamento> departamentos = dep.listar();
+
+        return departamentos.stream().anyMatch(departamento -> departamento.getId() == id);
+    }
+
+    private static int lerIdDepartamentoValidado(Scanner sc) {
+        int id = -1;
+        boolean valido = false;
+
+        while (!valido) {
+            try {
+                id = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
+
+                if (verificarIdDepartamentoExiste(id)) {
+                    valido = true;
+                } else {
+                    System.out.println("ID inválido! Tente novamente.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite um número.");
+            }
+        }
+
+        return id;
     }
 
     private static double arredondar(double valor) {
