@@ -2,6 +2,7 @@ package br.com.FolhaDePagamento.Dao;
 
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
+import br.com.FolhaDePagamento.Model.FolhaDePagamento;
 import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 
@@ -13,6 +14,12 @@ public class FuncionarioDao {
 
     public Connection getConnection() {
         return new ConnectionFactory().getConnection();
+    }
+
+    public void inserirLista(List<Funcionario> funcionarios) {
+        for (Funcionario func : funcionarios) {
+            inserir(func);
+        }
     }
 
     public void inserir(Funcionario funcionario) {

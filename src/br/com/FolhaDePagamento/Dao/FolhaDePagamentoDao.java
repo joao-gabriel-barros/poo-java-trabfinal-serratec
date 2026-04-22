@@ -11,23 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FolhaDePagamentoDao {
+    public void inserirLista(List<FolhaDePagamento> folhas) {
+        for (FolhaDePagamento folha : folhas) {
+            inserir(folha);
+        }
+    }
     public void inserir(FolhaDePagamento folhaDePagamento) {
         String sql = "INSERT INTO folha_pagamento (cpf_funcionario, data , inss, ir, liquido) VALUES (?,?,?,?,?)";
         try (Connection conn = new ConnectionFactory().getConnection();
         	PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         	stmt.setString(1, folhaDePagamento.getCpf_funcionario());
-            stmt.setString(2, folhaDePagamento.getData().toString());
+            stmt.setDate(2, java.sql.Date.valueOf(folhaDePagamento.getData()));
             stmt.setDouble(3, folhaDePagamento.getInss());
             stmt.setDouble(4, folhaDePagamento.getIr());
             stmt.setDouble(5, folhaDePagamento.getLiquido());
             stmt.execute();
 
-            System.out.println("Folha de pagamento inserida com sucesso!");
+            System.out.println("\nFolha de pagamento inserida com sucesso no banco de dados.");
 
         } catch (SQLException e) {
 
-        	System.err.println("Não foi possível inserir a folha de pagamento no banco de dados");
+        	System.err.println("\nNão foi possível inserir a folha de pagamento no banco de dados");
+            e.printStackTrace();
         }
     }
 

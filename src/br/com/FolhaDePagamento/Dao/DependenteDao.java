@@ -18,6 +18,12 @@ public class DependenteDao {
         return new ConnectionFactory().getConnection();
     }
 
+    public void inserirLista(List<Dependente> dependentes) {
+        for (Dependente dep : dependentes) {
+            inserir(dep);
+        }
+    }
+
     public void inserir(Dependente dependente) {
         String sql = "INSERT INTO dependente (cpf,nome,nascimento,parentesco,cpf_funcionario) VALUES (?,?,?,?,?)";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,6 +35,7 @@ public class DependenteDao {
             stmt.execute();
         } catch (SQLException e) {
             System.err.println("Não foi possível inserir o dependente no banco de dados");
+            e.printStackTrace();
         }
     }
 

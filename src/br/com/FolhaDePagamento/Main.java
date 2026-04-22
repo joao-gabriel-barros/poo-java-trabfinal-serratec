@@ -1,6 +1,8 @@
 package br.com.FolhaDePagamento;
 
 import br.com.FolhaDePagamento.Dao.DepartamentoDao;
+import br.com.FolhaDePagamento.Dao.DependenteDao;
+import br.com.FolhaDePagamento.Dao.FolhaDePagamentoDao;
 import br.com.FolhaDePagamento.Dao.FuncionarioDao;
 import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
@@ -140,8 +142,12 @@ public class Main {
         List<Dependente> dep = resultado.getDependentes();
         List<FolhaDePagamento> fp = new ArrayList<>();
 
+        System.out.println(dep.toString());
+
         fp = calcularImpostos(func, dep);
 
+        salvarNoBancoFuncionario(func);
+        salvarNoBancoDependente(dep);
         salvarNoBancoFolhaDePagamento(fp);
 
         gravarArquivoCsv(caminhoDeSaida, fp, func);
@@ -169,11 +175,14 @@ public class Main {
         Funcionario funcionario = new Funcionario(cpf, nome, nascimento, salario_bruto, id);
         func.add(funcionario);
 
+        ConnectionFactory.setVerbose(false);
         FuncionarioDao funcionarioDao = new FuncionarioDao();
         funcionarioDao.inserir(funcionario);
 
         fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
 
+        FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
+        folhaDePagamentoDao.inserirLista(fp);
     }
 
     private static void listarDepartamentos() {
@@ -265,8 +274,39 @@ public class Main {
         return fp;
     }
 
+    private static void salvarNoBancoFuncionario(List<Funcionario> func) {
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            FuncionarioDao funcDao = new FuncionarioDao();
+            funcDao.inserirLista(func);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private static void salvarNoBancoDependente(List<Dependente> dep) {
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            DependenteDao depDao = new DependenteDao();
+            depDao.inserirLista(dep);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     private static void salvarNoBancoFolhaDePagamento(List<FolhaDePagamento> fp) {
-        System.out.println(fp.toString());
-        System.out.println("salvo com sucesso no banco.");
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            FolhaDePagamentoDao folhaDao = new FolhaDePagamentoDao();
+            folhaDao.inserirLista(fp);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

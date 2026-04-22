@@ -38,7 +38,7 @@ public class CsvFileRecord {
             System.out.println("║  ✓ Arquivo gravado com sucesso!            ║");
             System.out.println("╠════════════════════════════════════════════╣");
             System.out.println("║ Caminho: " + caminhoSaida + "              ║");
-            System.out.println("║ Registros: " + folhas.size() +  "          ║");
+            System.out.println("║ Registros: " + folhas.size() +  "                  ║");
             System.out.println("╚════════════════════════════════════════════╝\n");
 
         } catch (IOException e) {
