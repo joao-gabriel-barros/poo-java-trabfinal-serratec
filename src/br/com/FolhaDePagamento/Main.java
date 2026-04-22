@@ -185,11 +185,28 @@ public class Main {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
         String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de saída: ");
 
+        if (!validarArquivo(caminhoDeEntrada)) {
+            System.err.println("Erro: Arquivo de entrada não encontrado em: " + caminhoDeEntrada);
+            System.err.println("   Verifique se o caminho está correto e tente novamente.");
+            return;
+        }
+
+        if (!validarCaminhoSaida(caminhoDeSaida)) {
+            System.err.println("Erro: Caminho de saída inválido: " + caminhoDeSaida);
+            System.err.println("Verifique se o diretório existe e se tem permissão de escrita.");
+            return;
+        }
+
         CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
 
         List<Funcionario> func = resultado.getFuncionarios();
         List<Dependente> dep = resultado.getDependentes();
         List<FolhaDePagamento> fp = new ArrayList<>();
+
+        if (func.isEmpty()) {
+            System.out.println("Aviso: Nenhum funcionário foi lido do arquivo.");
+            return;
+        }
 
         fp = calcularImpostos(func, dep);
 
@@ -198,6 +215,21 @@ public class Main {
         salvarNoBancoFolhaDePagamento(fp);
 
         gravarArquivoCsv(caminhoDeSaida, fp, func);
+    }
+
+    private static boolean validarArquivo(String caminho) {
+        java.io.File arquivo = new java.io.File(caminho);
+        return arquivo.exists() && arquivo.isFile() && arquivo.canRead();
+    }
+
+    private static boolean validarCaminhoSaida(String caminho) {
+        try {
+            java.io.File arquivo = new java.io.File(caminho);
+            java.io.File diretorio = arquivo.getParentFile();
+            return diretorio != null && (diretorio.exists() || diretorio.mkdirs());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
