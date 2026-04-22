@@ -58,10 +58,11 @@ public class Main {
                         listarDepartamentos();
                         break;
                     case "4":
-                        System.out.println("Listar Funcionários por Departamento");
+                        listarFuncionariosPorDepartamento();
                         break;
                     case "5":
                         System.out.println("Listar Histórico de Folhas de Pagamento");
+                        listarFolhasDePagamentos();
                         break;
                     case "6":
                         testarConexaoComBancoDeDados();
@@ -132,9 +133,57 @@ public class Main {
         return sc.nextDouble();
     }
 
+    private static int lerIdDepartamentoValidado(Scanner sc) {
+        int id = -1;
+        boolean valido = false;
+
+        while (!valido) {
+            try {
+                id = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
+
+                if (verificarIdDepartamentoExiste(id)) {
+                    valido = true;
+                } else {
+                    System.out.println("ID inválido! Tente novamente.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida! Digite um número.");
+            }
+        }
+
+        return id;
+    }
+
+    private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
+        String opcaoDeSaida = "";
+
+        System.out.println("\n=================================");
+        System.out.println("====  Dados dos Dependentes  ====");
+        System.out.println("=================================");
+        do {
+            String cpf = lerString(sc, "Digite o cpf do dependente: ");
+            while (!isValido(cpf)) {
+                System.out.println("Cpf inválido. Tente novamente. ");
+                cpf = lerString(sc, "Digite o cpf do dependente novamente: ");
+            }
+
+            String nome = lerString(sc, "Digite o nome: ");
+            LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
+            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: ").toUpperCase());
+
+            Dependente dependente = new Dependente(cpf, nome, nascimento, parentesco, cpf_funcionario);
+            dep.add(dependente);
+
+            System.out.println("Deseja cadastrar outro dependente(S/N):");
+            opcaoDeSaida = sc.nextLine();
+        } while (opcaoDeSaida.equalsIgnoreCase("S"));
+
+        return dep;
+    }
+
     private static void calcularLoteViaArquivo(Scanner sc) {
         String caminhoDeEntrada = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
-        String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de entrada: ");
+        String caminhoDeSaida = lerString(sc, "Digite o caminho completo do arquivo de saída: ");
 
         CsvResult resultado = CsvFileReader.lerArquivoCsv(caminhoDeEntrada);
 
@@ -197,59 +246,31 @@ public class Main {
         }
     }
 
+    private static void listarFuncionariosPorDepartamento() {
+        ConnectionFactory.setVerbose(false);
+        FuncionarioDao funcionarioDao = new FuncionarioDao();
+        funcionarioDao.exibirFuncionariosPorDepartamento();
+    }
+
+    private static void listarFolhasDePagamentos() {
+        System.out.println("\n===================================");
+        System.out.println("= Histórico de Folhas de Pagamento =");
+        System.out.println("===================================");
+
+        ConnectionFactory.setVerbose(false);
+        FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
+        List<FolhaDePagamento> folhasDePagamentos = folhaDePagamentoDao.listar();
+        for (FolhaDePagamento folha : folhasDePagamentos) {
+            System.out.println(folha);
+        }
+        System.out.println("\n");
+    }
+
     private static boolean verificarIdDepartamentoExiste(int id) {
         DepartamentoDao dep = new DepartamentoDao();
         List<Departamento> departamentos = dep.listar();
 
         return departamentos.stream().anyMatch(departamento -> departamento.getId() == id);
-    }
-
-    private static int lerIdDepartamentoValidado(Scanner sc) {
-        int id = -1;
-        boolean valido = false;
-
-        while (!valido) {
-            try {
-                id = Integer.parseInt(lerString(sc, "Digite o id do departamento: "));
-
-                if (verificarIdDepartamentoExiste(id)) {
-                    valido = true;
-                } else {
-                    System.out.println("ID inválido! Tente novamente.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida! Digite um número.");
-            }
-        }
-
-        return id;
-    }
-
-    private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
-        String opcaoDeSaida = "";
-
-        System.out.println("\n=================================");
-        System.out.println("====  Dados dos Dependentes  ====");
-        System.out.println("=================================");
-        do {
-            String cpf = lerString(sc, "Digite o cpf do dependente: ");
-            while (!isValido(cpf)) {
-                System.out.println("Cpf inválido. Tente novamente. ");
-                cpf = lerString(sc, "Digite o cpf do dependente novamente: ");
-            }
-
-            String nome = lerString(sc, "Digite o nome: ");
-            LocalDate nascimento = LocalDate.parse(lerString(sc, "Digite a data nascimento(dd-MM-yyyy): "), FORMATTER_BR);
-            Parentesco parentesco = Parentesco.valueOf(lerString(sc, "Digite seu parentesco: ").toUpperCase());
-
-            Dependente dependente = new Dependente(cpf, nome, nascimento, parentesco, cpf_funcionario);
-            dep.add(dependente);
-
-            System.out.println("Deseja cadastrar outro dependente(S/N):");
-            opcaoDeSaida = sc.nextLine();
-        } while (opcaoDeSaida.equalsIgnoreCase("S"));
-
-        return dep;
     }
 
     private static double arredondar(double valor) {
@@ -282,8 +303,7 @@ public class Main {
 
             FuncionarioDao funcDao = new FuncionarioDao();
             funcDao.inserirLista(func);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -294,8 +314,7 @@ public class Main {
 
             DependenteDao depDao = new DependenteDao();
             depDao.inserirLista(dep);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -306,8 +325,7 @@ public class Main {
 
             FolhaDePagamentoDao folhaDao = new FolhaDePagamentoDao();
             folhaDao.inserirLista(fp);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }

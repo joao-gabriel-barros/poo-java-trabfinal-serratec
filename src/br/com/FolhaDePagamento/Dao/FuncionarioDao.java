@@ -2,7 +2,6 @@ package br.com.FolhaDePagamento.Dao;
 
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
-import br.com.FolhaDePagamento.Model.FolhaDePagamento;
 import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Persistence.ConnectionFactory;
 
@@ -59,5 +58,49 @@ public class FuncionarioDao {
             System.err.println("Não foi possível recuperar os funcionários do banco");
         }
         return funcionarios;
+    }
+
+    public void exibirFuncionariosPorDepartamento() {
+        String sql = "SELECT f.nome as func_nome, d.nome as dept_nome " +
+                "FROM funcionario f " +
+                "INNER JOIN departamento d " +
+                "ON f.id_departamento = d.id " +
+                "ORDER BY d.nome, f.nome";
+
+        System.out.println("\n===================================");
+        System.out.println("== Funcionários por Departamento ==");
+        System.out.println("===================================");
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+
+            String departamentoAtual = "";
+            boolean temDados = false;
+
+            while (rs.next()) {
+                temDados = true;
+                String departamento = rs.getString("dept_nome");
+                String funcionario = rs.getString("func_nome");
+
+                if (!departamento.equals(departamentoAtual)) {
+                    if (!departamentoAtual.isEmpty()) {
+                        System.out.println();
+                    }
+                    System.out.println("[" + departamento + "]");
+                    departamentoAtual = departamento;
+                }
+
+                System.out.println("  ✓ " + funcionario);
+            }
+
+            if (!temDados) {
+                System.out.println("  Nenhum funcionário cadastrado.\n");
+            } else {
+                System.out.println();
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar funcionários por departamento: " + e.getMessage());
+        }
     }
 }
