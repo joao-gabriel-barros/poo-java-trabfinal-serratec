@@ -175,10 +175,12 @@ public class Main {
 
         salvarNoBancoFuncionario(func);
 
-        dep = lerDependentes(sc, dep, cpf);
-        salvarNoBancoDependente(dep);
+        List<Dependente> dependentesLidos = lerDependentes(sc, dep, cpf);
+        salvarNoBancoDependente(dependentesLidos);
 
-        fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
+        fp = calcularImpostos(func, dependentesLidos);
+
+        exibirRecibo(funcionario, fp.get(0));
 
         salvarNoBancoFolhaDePagamento(fp);
     }
@@ -226,7 +228,9 @@ public class Main {
     private static List<Dependente> lerDependentes(Scanner sc, List<Dependente> dep, String cpf_funcionario) throws CpfInvalidoException {
         String opcaoDeSaida = "";
 
-        System.out.println("Digite agora os dados do(s) dependente(s): ");
+        System.out.println("\n=================================");
+        System.out.println("====  Dados dos Dependentes  ====");
+        System.out.println("=================================");
         do {
             String cpf = lerString(sc, "Digite o cpf do dependente: ");
             while (!isValido(cpf)) {
@@ -306,5 +310,24 @@ public class Main {
         catch (Exception e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static void exibirRecibo(Funcionario funcionario, FolhaDePagamento folha) {
+        System.out.println("\n\n");
+        System.out.println("╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║                      RECIBO DE PAGAMENTO                   ║");
+        System.out.println("║                    SERRATEC - RH SYSTEM                    ║");
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-55s    ║%n", "Funcionário: " + funcionario.getNome());
+        System.out.printf("║ %-55s    ║%n", "CPF: " + funcionario.getCpf());
+        System.out.printf("║ %-55s    ║%n", "Data: " + LocalDate.now());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Salário Bruto:", funcionario.getSalarioBruto());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Desconto INSS:", folha.getInss());
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "Desconto IR:", folha.getIr());
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ %-40s R$ %12.2f   ║%n", "SALÁRIO LÍQUIDO:", folha.getLiquido());
+        System.out.println("╚════════════════════════════════════════════════════════════╝\n");
     }
 }
