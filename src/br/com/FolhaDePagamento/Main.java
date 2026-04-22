@@ -142,8 +142,6 @@ public class Main {
         List<Dependente> dep = resultado.getDependentes();
         List<FolhaDePagamento> fp = new ArrayList<>();
 
-        System.out.println(dep.toString());
-
         fp = calcularImpostos(func, dep);
 
         salvarNoBancoFuncionario(func);
@@ -175,14 +173,14 @@ public class Main {
         Funcionario funcionario = new Funcionario(cpf, nome, nascimento, salario_bruto, id);
         func.add(funcionario);
 
-        ConnectionFactory.setVerbose(false);
-        FuncionarioDao funcionarioDao = new FuncionarioDao();
-        funcionarioDao.inserir(funcionario);
+        salvarNoBancoFuncionario(func);
+
+        dep = lerDependentes(sc, dep, cpf);
+        salvarNoBancoDependente(dep);
 
         fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
 
-        FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
-        folhaDePagamentoDao.inserirLista(fp);
+        salvarNoBancoFolhaDePagamento(fp);
     }
 
     private static void listarDepartamentos() {

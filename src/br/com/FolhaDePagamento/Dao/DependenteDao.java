@@ -35,7 +35,6 @@ public class DependenteDao {
             stmt.execute();
         } catch (SQLException e) {
             System.err.println("Não foi possível inserir o dependente no banco de dados");
-            e.printStackTrace();
         }
     }
 

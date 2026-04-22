@@ -79,8 +79,6 @@ public class CsvFileReader {
             System.err.println("Arquivo não encontrado: " + e.getMessage());
         }
 
-        System.out.println(dependentes);
-
         return new CsvResult(funcionarios, dependentes);
     }
 }

@@ -33,7 +33,6 @@ public class FolhaDePagamentoDao {
         } catch (SQLException e) {
 
         	System.err.println("\nNão foi possível inserir a folha de pagamento no banco de dados");
-            e.printStackTrace();
         }
     }
 
