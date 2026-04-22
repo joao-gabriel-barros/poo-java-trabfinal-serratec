@@ -173,9 +173,7 @@ public class Main {
         funcionarioDao.inserir(funcionario);
 
         fp = calcularImpostos(func, lerDependentes(sc, dep, cpf));
-        // FolhaDePagamento folhaDePagamento = new FolhaDePagamento(cpf, LocalDate.now(), );
 
-        System.out.print(fp.toString());
     }
 
     private static void listarDepartamentos() {
