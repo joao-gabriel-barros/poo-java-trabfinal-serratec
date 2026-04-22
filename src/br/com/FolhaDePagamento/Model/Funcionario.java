@@ -34,9 +34,9 @@ public final class Funcionario extends Pessoa {
     public String toString() {
         return "Nome = " + nome +
                 "| CPF = " + cpf +
-                ", data de nascimento = " + nascimento +
-                ", ID Departamento = " + idDepartamento +
-                ", Salário Bruto = " + salarioBruto +
+                " | data de nascimento = " + nascimento +
+                " | ID Departamento = " + idDepartamento +
+                " | Salário Bruto = " + salarioBruto +
                 "\n";
     }
 }
