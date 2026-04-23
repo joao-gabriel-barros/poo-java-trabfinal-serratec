@@ -25,7 +25,7 @@ public class ConnectionFactory {
             } else {
                 if (verbose) System.out.println("Erro nos dados da conexão!");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             System.err.println("\nNão foi possível conectar...");
         }
         return connection;

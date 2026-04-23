@@ -65,6 +65,9 @@ public class Main {
                         listarFolhasDePagamentos();
                         break;
                     case "6":
+                        listarFolhaPorCpf(sc);
+                        break;
+                    case "7":
                         testarConexaoComBancoDeDados();
                         break;
                     case "0":
@@ -104,8 +107,9 @@ public class Main {
         System.out.println("\t3. Listar Todos os Departamentos");
         System.out.println("\t4. Listar Funcionários por Departamento");
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
+        System.out.println("\t6. Listar folha de pagamento por CPF");
         System.out.println("\n --- TESTE DE CONEXÃO COM BANCO DE DADOS ---");
-        System.out.println("\t6. Testar conexão com banco de dados");
+        System.out.println("\t7. Testar conexão com banco de dados");
         System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
     }
@@ -292,6 +296,24 @@ public class Main {
         ConnectionFactory.setVerbose(false);
         FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
         List<FolhaDePagamento> folhasDePagamentos = folhaDePagamentoDao.listar();
+
+        for (FolhaDePagamento folha : folhasDePagamentos) {
+            System.out.println(folha);
+        }
+        System.out.println("\n");
+    }
+
+    private static void listarFolhaPorCpf(Scanner sc) {
+        String cpf = lerString(sc, "\nDigite o cpf do funcionário: ");
+        ConnectionFactory.setVerbose(false);
+
+        FolhaDePagamentoDao folhaDePagamentoDao = new FolhaDePagamentoDao();
+        List<FolhaDePagamento> folhasDePagamentos = folhaDePagamentoDao.listarFolhaPorCpf(cpf);
+
+        System.out.println("\n===================================");
+        System.out.println("=== Folhas de Pagamento por CPF ===");
+        System.out.println("===================================");
+
         for (FolhaDePagamento folha : folhasDePagamentos) {
             System.out.println(folha);
         }
