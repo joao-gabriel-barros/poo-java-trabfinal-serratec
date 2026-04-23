@@ -1,0 +1,215 @@
+_@startuml FolhaDePagamento_UML
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam classBackgroundColor #E1F5FF
+skinparam classBorderColor #01579B
+skinparam arrowColor #01579B
+
+package "Model" #E3F2FD {
+    abstract class Pessoa {
+        #cpf: String
+        #nome: String
+        #nascimento: LocalDate
+        +getCpf(): String
+        +getNome(): String
+        +getNascimento(): LocalDate
+    }
+
+    class Funcionario extends Pessoa {
+        -salarioBruto: double
+        -idDepartamento: int
+        +getSalarioBruto(): double
+        +getIdDepartamento(): int
+    }
+
+    class Dependente extends Pessoa {
+        -parentesco: Parentesco
+        -cpfFuncionario: String
+        +getParentesco(): Parentesco
+        +getCpfFuncionario(): String
+    }
+
+    class FolhaDePagamento {
+        -cpf_funcionario: String
+        -data: LocalDate
+        -inss: double
+        -ir: double
+        -liquido: double
+        +getInss(): double
+        +getIr(): double
+        +getLiquido(): double
+        +setLiquido(double): void
+    }
+
+    class Departamento {
+        -id: int
+        -nome: String
+        +getId(): int
+        +getNome(): String
+    }
+}
+
+package "Enum" #F3E5F5 {
+    enum Parentesco {
+        ESPOSA
+        FILHO
+        OUTROS
+    }
+}
+
+package "Exceptions" #FFEBEE {
+    class CpfInvalidoException extends Exception
+    class SalarioInvalidoException extends Exception
+    class DependenteSemTitularException extends Exception
+}
+
+package "Interfaces" #E8F5E9 {
+    interface CalculoINSS {
+        +calcularInss(double): double
+    }
+
+    interface CalculoIrrf {
+        +calcularBase(double, double, int): double
+        +calcularIRRF(double, double, int): double
+    }
+
+    interface CalculoSalarioLiquido {
+        +calcularSalarioLiquido(double, double, double): double
+    }
+}
+
+package "Services" #FFF3E0 {
+    package "Csv" {
+        class CsvFileReader {
+            +lerArquivoCsv(String): CsvResult
+        }
+
+        class CsvFileRecord {
+            +gravarArquivoCsv(String, List<FolhaDePagamento>, List<Funcionario>): void
+        }
+
+        class CsvResult {
+            -funcionarios: List<Funcionario>
+            -dependentes: List<Dependente>
+            +getFuncionarios(): List<Funcionario>
+            +getDependentes(): List<Dependente>
+        }
+    }
+
+    package "Validators" {
+        class CpfValidator {
+            +validar(String): void
+            +isValido(String): boolean
+        }
+
+        class SalarioValidator {
+            +validar(double): void
+        }
+    }
+
+    package "Inss" {
+        class CalculoInssService implements CalculoINSS {
+            +calcularInss(double): double
+        }
+    }
+
+    package "Irrf" {
+        class CalculoIrpfService implements CalculoIrrf {
+            +calcularBase(double, double, int): double
+            +calcularIRRF(double, double, int): double
+        }
+    }
+
+    package "SalarioLiquidoFinal" {
+        class CalculoSalarioLiquidoService implements CalculoSalarioLiquido {
+            +calcularSalarioLiquido(double, double, double): double
+        }
+    }
+}
+
+package "Dao" #E0F2F1 {
+    class FuncionarioDao {
+        +inserir(Funcionario): void
+        +inserirLista(List<Funcionario>): void
+        +listar(): List<Funcionario>
+        +listarFuncionariosPorDepartamento(): void
+    }
+
+    class DependenteDao {
+        +inserir(Dependente): void
+        +inserirLista(List<Dependente>): void
+        +listar(): List<Dependente>
+    }
+
+    class DepartamentoDao {
+        +listar(): List<Departamento>
+        +buscarId(int): Departamento
+    }
+
+    class FolhaDePagamentoDao {
+        +inserir(FolhaDePagamento): void
+        +inserirLista(List<FolhaDePagamento>): void
+        +listar(): List<FolhaDePagamento>
+    }
+}
+
+package "Persistence" #F1F8E9 {
+    class ConnectionFactory {
+        -url: String
+        -usuario: String
+        -senha: String
+        +getConnection(): Connection
+        +setVerbose(boolean): void
+    }
+
+    class DatabaseInitializer {
+        +run(Connection): void
+    }
+}
+
+package "Main" #FCE4EC {
+    class Main {
+        +main(String[]): void
+        -calcularLoteViaArquivo(Scanner): void
+        -calcularFolhaAvulsa(Scanner): void
+        -listarDepartamentos(): void
+        -listarFuncionariosPorDepartamento(): void
+        -listarFolhasDePagamentos(): void
+    }
+}
+
+' Relacionamentos
+Funcionario "1" -- "*" Dependente : vinculado a
+Funcionario -- Departamento : pertence a
+Funcionario -- FolhaDePagamento : gera
+Dependente -- FolhaDePagamento : afeta
+
+FuncionarioDao --> Funcionario : gerencia
+DependenteDao --> Dependente : gerencia
+DepartamentoDao --> Departamento : gerencia
+FolhaDePagamentoDao --> FolhaDePagamento : gerencia
+
+CsvFileReader --> CsvResult : retorna
+CsvFileReader --> Funcionario : cria
+CsvFileReader --> Dependente : cria
+
+CalculoInssService --|> CalculoINSS
+CalculoIrpfService --|> CalculoIrrf
+CalculoSalarioLiquidoService --|> CalculoSalarioLiquido
+
+CpfValidator --> CpfInvalidoException : lança
+SalarioValidator --> SalarioInvalidoException : lança
+
+Main --> CsvFileReader : usa
+Main --> FuncionarioDao : usa
+Main --> DependenteDao : usa
+Main --> FolhaDePagamentoDao : usa
+Main --> CalculoInssService : usa
+Main --> CalculoIrpfService : usa
+Main --> CalculoSalarioLiquidoService : usa
+Main --> ConnectionFactory : usa
+
+ConnectionFactory --> DatabaseInitializer : inicializa
+
+@enduml
+

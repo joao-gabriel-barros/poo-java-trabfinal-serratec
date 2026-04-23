@@ -43,7 +43,7 @@ public class FolhaDePagamentoDao {
         try (Connection conn = new ConnectionFactory().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-        		
+
         		while (rs.next()) {
         			FolhaDePagamento folhaDePagamento = new FolhaDePagamento(
                     rs.getString("cpf_funcionario"),
@@ -56,8 +56,43 @@ public class FolhaDePagamentoDao {
             }
 
         } catch (SQLException e) {
-
         	System.err.println("Não foi possível listar as folhas de pagamento.");
+        }
+
+        return lista;
+    }
+
+    public List<FolhaDePagamento> listarFolhaPorCpf(String cpf) {
+        String sql = "SELECT * FROM folha_pagamento WHERE cpf_funcionario = ?";
+        List<FolhaDePagamento> lista = new ArrayList<>();
+
+        try (Connection conn = new ConnectionFactory().getConnection()) {
+
+            if (conn == null) {
+                System.err.println("Erro: Não foi possível conectar ao banco de dados.");
+                return lista;
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, cpf);
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        FolhaDePagamento folhaDePagamento = new FolhaDePagamento(
+                                rs.getString("cpf_funcionario"),
+                                rs.getDate("data").toLocalDate(),
+                                rs.getDouble("inss"),
+                                rs.getDouble("ir"),
+                                rs.getDouble("liquido"));
+
+                        lista.add(folhaDePagamento);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar folhas de pagamento para o CPF: " + cpf);
+            System.err.println("   Motivo: " + e.getMessage());
         }
 
         return lista;
