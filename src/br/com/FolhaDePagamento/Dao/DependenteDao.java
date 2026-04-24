@@ -34,7 +34,13 @@ public class DependenteDao {
             stmt.setString(5, dependente.getCpfFuncionario());
             stmt.execute();
         } catch (SQLException e) {
-            System.err.println("Não foi possível inserir o dependente no banco de dados");
+            if (e.getMessage().contains("duplicate key") ||
+                    e.getSQLState().equals("23505")) {
+                System.err.println("Erro: Este CPF já está cadastrado no sistema!");
+                System.err.println("Não é possível inserir um dependente com CPF duplicado.");
+            } else {
+                System.err.println("Erro ao inserir dependente: " + e.getMessage());
+            }
         }
     }
 
@@ -59,5 +65,18 @@ public class DependenteDao {
             throw new RuntimeException(e);
         }
         return dependentes;
+    }
+
+    public boolean existePorCpf(String cpf) {
+        String sql = "SELECT 1 FROM dependente WHERE cpf = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar dependente: " + e.getMessage());
+        }
+        return false;
     }
 }

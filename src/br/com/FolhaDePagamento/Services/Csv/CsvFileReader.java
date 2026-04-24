@@ -16,6 +16,8 @@ import br.com.FolhaDePagamento.Model.Funcionario;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Services.Validators.CpfValidator;
 
+import static br.com.FolhaDePagamento.Services.Validators.ExistsValidators.verificarSeFuncionarioExiste;
+
 public class CsvFileReader {
     public static CsvResult lerArquivoCsv(String arquivo) {
         List<Funcionario> funcionarios = new ArrayList<>();
@@ -42,6 +44,12 @@ public class CsvFileReader {
                     if (campos.length >= 5) {
                         String nome = campos[0].trim();
                         cpfFuncionario = campos[1].trim();
+
+                        if (verificarSeFuncionarioExiste(cpfFuncionario)) {
+                            System.out.println("\nEste CPF já está cadastrado no sistema!");
+                            System.out.println("Operação cancelada.\n");
+                           break;
+                        }
 
                         if (!CpfValidator.isValido(cpfFuncionario)) {
                             System.err.println("Linha " + numeroLinha + " ignorada (CPF inválido): " + cpfFuncionario);

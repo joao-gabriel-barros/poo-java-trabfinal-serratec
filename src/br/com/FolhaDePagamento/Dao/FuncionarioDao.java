@@ -32,7 +32,13 @@ public class FuncionarioDao {
             stmt.setInt(5, funcionario.getIdDepartamento());
             stmt.execute();
         } catch (SQLException e) {
-            System.err.println("Não foi possível inserir o funcionário no banco de dados");
+            if (e.getMessage().contains("duplicate key") ||
+                    e.getSQLState().equals("23505")) {
+                System.err.println("Erro: Este CPF já está cadastrado no sistema!");
+                System.err.println("Não é possível inserir um funcionário com CPF duplicado.");
+            } else {
+                System.err.println("Erro ao inserir funcionário: " + e.getMessage());
+            }
         }
     }
 
@@ -85,5 +91,18 @@ public class FuncionarioDao {
         }
 
         return listaFuncionariosPorDepartamento;
+    }
+
+    public boolean existePorCpf(String cpf) {
+        String sql = "SELECT 1 FROM funcionario WHERE cpf = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar funcionário: " + e.getMessage());
+        }
+        return false;
     }
 }

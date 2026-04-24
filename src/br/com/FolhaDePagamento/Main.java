@@ -28,6 +28,7 @@ import static br.com.FolhaDePagamento.Services.Inss.CalculoInssService.calcularI
 import static br.com.FolhaDePagamento.Services.Irrf.CalculoIrpfService.calcularIRRF;
 import static br.com.FolhaDePagamento.Services.SalarioLiquidoFinal.CalculoSalarioLiquidoService.salarioLiquido;
 import static br.com.FolhaDePagamento.Services.Validators.CpfValidator.isValido;
+import static br.com.FolhaDePagamento.Services.Validators.ExistsValidators.*;
 import static br.com.FolhaDePagamento.Util.ConstantesNegocio.FORMATTER_BR;
 
 public class Main {
@@ -241,21 +242,6 @@ public class Main {
         gravarArquivoCsv(caminhoDeSaida, fp, func);
     }
 
-    private static boolean validarArquivo(String caminho) {
-        java.io.File arquivo = new java.io.File(caminho);
-        return arquivo.exists() && arquivo.isFile() && arquivo.canRead();
-    }
-
-    private static boolean validarCaminhoSaida(String caminho) {
-        try {
-            java.io.File arquivo = new java.io.File(caminho);
-            java.io.File diretorio = arquivo.getParentFile();
-            return diretorio != null && (diretorio.exists() || diretorio.mkdirs());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     private static void calcularFolhaAvulsa(Scanner sc) throws CpfInvalidoException {
         List<Funcionario> func = new ArrayList<>();
         List<Dependente> dep = new ArrayList<>();
@@ -265,6 +251,12 @@ public class Main {
         while (!isValido(cpf)) {
             System.out.println("Cpf inválido. Tente novamente. ");
             cpf = lerString(sc, "Digite o cpf do funcionário novamente: ");
+        }
+
+        if (verificarSeFuncionarioExiste(cpf)) {
+            System.out.println("\nEste CPF já está cadastrado no sistema!");
+            System.out.println("Operação cancelada.\n");
+            return;
         }
 
         String nome = lerString(sc, "Digite o nome: ");
