@@ -8,7 +8,6 @@ public class CpfValidator {
             throw new CpfInvalidoException("CPF nao pode estar vazio");
         }
 
-        // valida tamanho
         if (cpf.length() != 11) {
             throw new CpfInvalidoException("CPF deve conter 11 dígitos");
         }
