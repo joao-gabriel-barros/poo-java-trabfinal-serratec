@@ -10,6 +10,12 @@
 ## 📖 Sobre o Projeto
 Projeto final desenvolvido para a disciplina de **Programação Orientada a Objetos (POO)** do Serratec. O sistema automatiza o processamento de folhas de pagamento, calculando impostos (INSS e IRRF) com base nas tabelas de 2025 e garantindo a persistência total via JDBC.
 
+## 🗂️ Diagrama UML
+
+> O diagrama abaixo representa a arquitetura de classes do sistema, incluindo herança, associações e interfaces.
+
+<img width="1277" height="1179" alt="Diagrama UML Sistema de Folha de Pagamento drawio (3)" src="https://github.com/user-attachments/assets/40c9385e-8074-4fd6-b9ef-ee6ddef4ea38" />
+
 ## 🛠️ Tecnologias e Conceitos
 - **Java 17:** Uso de Streams, Lambdas e Herança Abstrata.
 - **PostgreSQL:** Base de dados relacional para armazenamento persistente.
