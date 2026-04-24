@@ -78,7 +78,6 @@ public class Main {
                         listarFuncionariosPorDepartamento();
                         break;
                     case "5":
-                        System.out.println("Listar Histórico de Folhas de Pagamento");
                         listarFolhasDePagamentos();
                         break;
                     case "6":
@@ -308,16 +307,10 @@ public class Main {
         System.out.println("== Funcionários por Departamento ==");
         System.out.println("===================================");
 
-        boolean temDados = false;
-
-        if (!temDados) {
-            System.out.println("Nenhum funcionário vinculado a um departamento no momento.\n");
-        } else {
-            for (FuncionarioDepartamentoDTO funcionario : lista) {
-                System.out.println(funcionario);
-            }
+        for (FuncionarioDepartamentoDTO funcionario : lista) {
+            System.out.println(funcionario);
         }
-
+        System.out.println("\n");
     }
 
     private static void listarFolhasDePagamentos() {
