@@ -2,9 +2,11 @@ package br.com.FolhaDePagamento.Services.Irrf;
 
 import br.com.FolhaDePagamento.Interfaces.CalculoIrrf;
 
+import static br.com.FolhaDePagamento.Util.ConstantesNegocio.VALOR_DEPENDENTE_IR;
+
 public class CalculoIrpfService implements CalculoIrrf {
     public static double calcularBase(double salarioBruto, double valorINSS, int dependentes) {
-        return salarioBruto - valorINSS - (dependentes * 189.59);
+        return salarioBruto - valorINSS - (dependentes * VALOR_DEPENDENTE_IR);
     }
 
     public static double calcularIRRF(double salarioBruto, double valorINSS, int dependentes) {
