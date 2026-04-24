@@ -295,7 +295,7 @@ public class Main {
         boolean temDados = false;
 
         if (!temDados) {
-            System.out.println("  Nenhum funcionário cadastrado.\n");
+            System.out.println("Nenhum funcionário vinculado a um departamento no momento.\n");
         } else {
             for (FuncionarioDepartamentoDTO funcionario : lista) {
                 System.out.println(funcionario);
