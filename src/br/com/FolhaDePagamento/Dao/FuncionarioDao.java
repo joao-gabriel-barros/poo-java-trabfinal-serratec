@@ -1,5 +1,6 @@
 package br.com.FolhaDePagamento.Dao;
 
+import br.com.FolhaDePagamento.Dto.FuncionarioDepartamentoDTO;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
 import br.com.FolhaDePagamento.Model.Funcionario;
@@ -60,47 +61,29 @@ public class FuncionarioDao {
         return funcionarios;
     }
 
-    public void exibirFuncionariosPorDepartamento() {
+    public List<FuncionarioDepartamentoDTO> exibirFuncionariosPorDepartamento() {
+        List<FuncionarioDepartamentoDTO> listaFuncionariosPorDepartamento = new ArrayList<>();
+
         String sql = "SELECT f.nome as func_nome, d.nome as dept_nome " +
                 "FROM funcionario f " +
                 "INNER JOIN departamento d " +
                 "ON f.id_departamento = d.id " +
                 "ORDER BY d.nome, f.nome";
 
-        System.out.println("\n===================================");
-        System.out.println("== Funcionários por Departamento ==");
-        System.out.println("===================================");
-
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
 
-            String departamentoAtual = "";
-            boolean temDados = false;
-
             while (rs.next()) {
-                temDados = true;
-                String departamento = rs.getString("dept_nome");
-                String funcionario = rs.getString("func_nome");
+                String dept_nome = rs.getString("dept_nome");
+                String func_nome = rs.getString("func_nome");
 
-                if (!departamento.equals(departamentoAtual)) {
-                    if (!departamentoAtual.isEmpty()) {
-                        System.out.println();
-                    }
-                    System.out.println("[" + departamento + "]");
-                    departamentoAtual = departamento;
-                }
-
-                System.out.println("  ✓ " + funcionario);
-            }
-
-            if (!temDados) {
-                System.out.println("  Nenhum funcionário cadastrado.\n");
-            } else {
-                System.out.println();
+                listaFuncionariosPorDepartamento.add(new FuncionarioDepartamentoDTO(func_nome, dept_nome));
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao listar funcionários por departamento: " + e.getMessage());
         }
+
+        return listaFuncionariosPorDepartamento;
     }
 }

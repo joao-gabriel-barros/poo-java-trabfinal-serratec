@@ -4,6 +4,7 @@ import br.com.FolhaDePagamento.Dao.DepartamentoDao;
 import br.com.FolhaDePagamento.Dao.DependenteDao;
 import br.com.FolhaDePagamento.Dao.FolhaDePagamentoDao;
 import br.com.FolhaDePagamento.Dao.FuncionarioDao;
+import br.com.FolhaDePagamento.Dto.FuncionarioDepartamentoDTO;
 import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
@@ -32,10 +33,26 @@ import static br.com.FolhaDePagamento.Util.ConstantesNegocio.FORMATTER_BR;
 public class Main {
     public static void main(String[] args) {
         ConnectionFactory.setVerbose(true);
-        try (Connection connection = new ConnectionFactory().getConnection()) {
+        Connection connection = new ConnectionFactory().getConnection();
+
+        if (connection == null) {
+            System.err.println("\n╔═══════════════════════════════════════════════════════════╗");
+            System.err.println("║                    ERRO DE CONEXÃO                        ║");
+            System.err.println("╚═══════════════════════════════════════════════════════════╝");
+            System.err.println("\nO banco de dados não está disponível.");
+            System.err.println("\nVerifique:");
+            System.err.println("   • O PostgreSQL está rodando?");
+            System.err.println("   • As credenciais estão corretas (usuário/senha)?");
+            System.err.println("   • O banco \"folhapagamento\" existe?");
+            System.err.println("   • A porta 5432 está acessível?");
+            System.err.println("\nOu contate o administrador do sistema.\n");
+            return;
+        }
+
+        try (connection) {
             DatabaseInitializer.run(connection);
         } catch (SQLException e) {
-            System.err.println("Falha ao inicializar banco: " + e.getMessage());
+            System.err.println("\nFalha ao inicializar banco: " + e.getMessage());
             return;
         }
 
@@ -61,7 +78,6 @@ public class Main {
                         listarFuncionariosPorDepartamento();
                         break;
                     case "5":
-                        System.out.println("Listar Histórico de Folhas de Pagamento");
                         listarFolhasDePagamentos();
                         break;
                     case "6":
@@ -108,8 +124,12 @@ public class Main {
         System.out.println("\t4. Listar Funcionários por Departamento");
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
         System.out.println("\t6. Listar folha de pagamento por CPF");
+        System.out.println("\n --- CADASTRO ---");
+        System.out.println("\t7. Cadastro de funcionários");
+        System.out.println("\t8. Cadastro de departamentos");
+        System.out.println("\t9. Cadastro de dependentes");
         System.out.println("\n --- TESTE DE CONEXÃO COM BANCO DE DADOS ---");
-        System.out.println("\t7. Testar conexão com banco de dados");
+        System.out.println("\t10. Testar conexão com banco de dados");
         System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
     }
@@ -285,7 +305,16 @@ public class Main {
     private static void listarFuncionariosPorDepartamento() {
         ConnectionFactory.setVerbose(false);
         FuncionarioDao funcionarioDao = new FuncionarioDao();
-        funcionarioDao.exibirFuncionariosPorDepartamento();
+        List<FuncionarioDepartamentoDTO> lista = funcionarioDao.exibirFuncionariosPorDepartamento();
+
+        System.out.println("\n===================================");
+        System.out.println("== Funcionários por Departamento ==");
+        System.out.println("===================================");
+
+        for (FuncionarioDepartamentoDTO funcionario : lista) {
+            System.out.println(funcionario);
+        }
+        System.out.println("\n");
     }
 
     private static void listarFolhasDePagamentos() {
