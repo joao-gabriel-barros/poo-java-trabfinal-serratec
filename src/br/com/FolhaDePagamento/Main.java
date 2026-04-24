@@ -292,14 +292,14 @@ public class Main {
         System.out.println("== Funcionários por Departamento ==");
         System.out.println("===================================");
 
-        String departamentoAtual = "";
         boolean temDados = false;
-
 
         if (!temDados) {
             System.out.println("  Nenhum funcionário cadastrado.\n");
         } else {
-            System.out.println();
+            for (FuncionarioDepartamentoDTO funcionario : lista) {
+                System.out.println(funcionario);
+            }
         }
 
     }
