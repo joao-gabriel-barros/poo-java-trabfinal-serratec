@@ -12,6 +12,10 @@ public class Departamento {
         this.nome = nome;
     }
 
+    public Departamento(String nome) {
+        this.nome = nome;
+    }
+
     public int getId() {
         return id;
     }

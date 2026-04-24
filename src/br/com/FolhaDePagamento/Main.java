@@ -85,6 +85,9 @@ public class Main {
                         listarFolhaPorCpf(sc);
                         break;
                     case "7":
+                        cadastrarDepartamento(sc);
+                        break;
+                    case "8":
                         testarConexaoComBancoDeDados();
                         break;
                     case "0":
@@ -126,11 +129,9 @@ public class Main {
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
         System.out.println("\t6. Listar folha de pagamento por CPF");
         System.out.println("\n --- CADASTRO ---");
-        System.out.println("\t7. Cadastro de funcionários");
-        System.out.println("\t8. Cadastro de departamentos");
-        System.out.println("\t9. Cadastro de dependentes");
+        System.out.println("\t7. Cadastro de departamentos");
         System.out.println("\n --- TESTE DE CONEXÃO COM BANCO DE DADOS ---");
-        System.out.println("\t10. Testar conexão com banco de dados");
+        System.out.println("\t8. Testar conexão com banco de dados");
         System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
     }
@@ -422,5 +423,30 @@ public class Main {
         System.out.println("╠════════════════════════════════════════════════════════════╣");
         System.out.printf("║ %-40s R$ %12.2f   ║%n", "SALÁRIO LÍQUIDO:", folha.getLiquido());
         System.out.println("╚════════════════════════════════════════════════════════════╝\n");
+    }
+
+    private static void cadastrarDepartamento(Scanner sc) throws CpfInvalidoException {
+        List<Departamento> departamentos = new ArrayList<>();
+        String sair;
+        do {
+            String nome = lerString(sc, "Digite o nome do departamento: ");
+            Departamento departamento = new Departamento(nome);
+            departamentos.add(departamento);
+            System.out.println("\nDeseja cadastrar mais departamentos? (S/N): ");
+            sair = sc.nextLine();
+
+        } while (sair.equalsIgnoreCase("S"));
+
+        salvarNoBancoDepartamento(departamentos);
+    }
+    public static void salvarNoBancoDepartamento(List<Departamento> departamentos){
+        try {
+            ConnectionFactory.setVerbose(false);
+
+            DepartamentoDao depDao = new DepartamentoDao();
+            depDao.inserirLista(departamentos);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
