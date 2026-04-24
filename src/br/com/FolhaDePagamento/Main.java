@@ -124,8 +124,12 @@ public class Main {
         System.out.println("\t4. Listar Funcionários por Departamento");
         System.out.println("\t5. Listar Histórico de Folhas de Pagamento");
         System.out.println("\t6. Listar folha de pagamento por CPF");
+        System.out.println("\n --- CADASTRO ---");
+        System.out.println("\t7. Cadastro de funcionários");
+        System.out.println("\t8. Cadastro de departamentos");
+        System.out.println("\t9. Cadastro de dependentes");
         System.out.println("\n --- TESTE DE CONEXÃO COM BANCO DE DADOS ---");
-        System.out.println("\t7. Testar conexão com banco de dados");
+        System.out.println("\t10. Testar conexão com banco de dados");
         System.out.println("\n\t0. Sair");
         System.out.println("--------------------------------------- ");
     }
