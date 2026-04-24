@@ -4,6 +4,7 @@ import br.com.FolhaDePagamento.Dao.DepartamentoDao;
 import br.com.FolhaDePagamento.Dao.DependenteDao;
 import br.com.FolhaDePagamento.Dao.FolhaDePagamentoDao;
 import br.com.FolhaDePagamento.Dao.FuncionarioDao;
+import br.com.FolhaDePagamento.Dto.FuncionarioDepartamentoDTO;
 import br.com.FolhaDePagamento.Enum.Parentesco;
 import br.com.FolhaDePagamento.Exceptions.CpfInvalidoException;
 import br.com.FolhaDePagamento.Model.Departamento;
@@ -285,7 +286,22 @@ public class Main {
     private static void listarFuncionariosPorDepartamento() {
         ConnectionFactory.setVerbose(false);
         FuncionarioDao funcionarioDao = new FuncionarioDao();
-        funcionarioDao.exibirFuncionariosPorDepartamento();
+        List<FuncionarioDepartamentoDTO> lista =  funcionarioDao.exibirFuncionariosPorDepartamento();
+
+        System.out.println("\n===================================");
+        System.out.println("== Funcionários por Departamento ==");
+        System.out.println("===================================");
+
+        String departamentoAtual = "";
+        boolean temDados = false;
+
+
+        if (!temDados) {
+            System.out.println("  Nenhum funcionário cadastrado.\n");
+        } else {
+            System.out.println();
+        }
+
     }
 
     private static void listarFolhasDePagamentos() {
