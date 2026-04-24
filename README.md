@@ -14,7 +14,7 @@ Projeto final desenvolvido para a disciplina de **Programação Orientada a Obje
 
 > O diagrama abaixo representa a arquitetura de classes do sistema, incluindo herança, associações e interfaces.
 
-<img width="1277" height="1179" alt="Diagrama UML Sistema de Folha de Pagamento drawio (3)" src="https://github.com/user-attachments/assets/40c9385e-8074-4fd6-b9ef-ee6ddef4ea38" />
+<img width="1277" height="1233" alt="Diagrama UML Sistema de Folha de Pagamento drawio (4)" src="https://github.com/user-attachments/assets/683c754b-7af7-4d43-9306-fad89d36b87a" />
 
 ## 🛠️ Tecnologias e Conceitos
 - **Java 17:** Uso de Streams, Lambdas e Herança Abstrata.
